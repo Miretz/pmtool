@@ -22,6 +22,10 @@ const options = {
     endpoint: '/graphql',
     subscriptions: '/subscriptions',
     playground: '/playground',
+    cors: {
+        credentials: true,
+        origin: "*"
+    }
 }
 
 server.start(options, ({ port }) => console.log(`Server is running on port ${port}`))

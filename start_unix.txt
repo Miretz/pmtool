@@ -1,0 +1,16 @@
+mongod --dbpath ~/data/db
+
+npm install -g yarn
+
+cd server
+yarn install
+yarn dev
+cd ..
+
+cd client
+yarn global add @vue/cli
+yarn install
+yarn serve
+cd ..
+
+http://localhost:8080

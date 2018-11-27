@@ -1,0 +1,16 @@
+"C:\Program Files\MongoDB\Server\4.0\bin\mongod.exe" --dbpath="c:\data\db"
+
+npm install -g yarn
+
+cd server
+npm install node-gyp -g
+npm i
+npm start
+cd ..
+
+cd client
+yarn global add @vue/cli
+yarn serve
+cd ..
+
+http://localhost:8080

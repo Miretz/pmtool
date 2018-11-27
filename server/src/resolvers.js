@@ -77,6 +77,7 @@ const resolvers = {
             })
             //send emails
             //transporter.sendMail(welcomeEmail(email, user))
+            console.log(welcomeEmail(email, user))
             return user
         },
         async signup(_, { id, firstname, lastname, password }) {
