@@ -28,6 +28,7 @@ export default {
     return {
       subRoute: "folder",
       folderName: "",
+      folderDescription: "",
       folder: {
         shareWith: []
       }
@@ -69,12 +70,11 @@ export default {
   width: 100%;
 }
 .folder-description {
-  padding: 0;
   margin: 5px 0;
   height: auto;
   width: 100%;
-  background-color: lightgray;
 }
+
 .menu-title {
   margin: 0 5px;
   font-size: 12px;

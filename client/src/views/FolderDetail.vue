@@ -2,50 +2,72 @@
   <div class="white card max-height">
     <div class="folder-header">
       <form @submit.prevent="updateFolder">
-        <input class="no-outline header-title folder-name" type="text" name="taskname" ref="taskname" v-model="folderName" @keyup.esc="cancel" />
+        <input
+          class="no-outline header-title folder-name"
+          type="text"
+          name="taskname"
+          ref="taskname"
+          v-model="folderName"
+          @keyup.esc="cancel"
+        >
       </form>
-      <form @submit.prevent="updateFolder">
-        <textarea class="no-outline header-title folder-description" rows="4" name="taskdesc" ref="taskdesc" v-model="folderDescription" />
-        <button class="btn btn-large"><i class="fa fa-save"></i>&nbsp;Save</button>
-      </form>
+      <textarea
+        class="header-title folder-description"
+        placeholder="Please describe your project"
+        rows="4"
+        name="taskdesc"
+        ref="taskdesc"
+        v-model="folderDescription"
+        @keyup.esc="cancel"
+      />
+      <el-button type="primary" @click="updateFolder">
+        <i class="fa fa-save"></i>&nbsp;Save
+      </el-button>
     </div>
   </div>
 </template>
 <script>
-import { UpdateFolder } from '../constants/query.gql'
+import { UpdateFolder, GetFolders } from "../constants/query.gql";
 export default {
   data() {
     return {
       folderName: this.folder.name,
-      folderDescription: this.folder.description,
-    }
+      folderDescription: this.folder.description
+    };
   },
-  props: ['folder'],
+  props: ["folder"],
   mounted() {
-    document.title = `${this.folder.name} - pmtool`
+    document.title = `${this.folder.name} - pmtool`;
   },
   methods: {
     updateFolder(e) {
-      const name = this.folderName
-      const description = this.folderDescription
-      if (name === this.folder.name && description === this.folder.description) {
-        this.cancel(e)
-        return
+      const name = this.folderName;
+      const description = this.folderDescription;
+      const parent = this.folder.parent;
+      if (
+        name === this.folder.name &&
+        description === this.folder.description
+      ) {
+        this.cancel(e);
+        return;
       }
-      this.$apollo.mutate({
-        mutation: UpdateFolder,
-        variables: { id: this.folder.id, input: {name: name, description: description} },
-      }).then(() => {
-        this.cancel(e)
-      }).catch((error) => {
-        console.log(error)
-      })
+      this.$apollo
+        .mutate({
+          mutation: UpdateFolder,
+          variables: { id: this.folder.id, input: { name, description } }
+        })
+        .then(() => {
+          this.cancel(e);
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
     cancel(e) {
-      e.target.blur()
+      e.target.blur();
     }
   }
-}
+};
 </script>
 <style scoped>
 .folder-header {

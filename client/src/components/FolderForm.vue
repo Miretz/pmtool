@@ -40,10 +40,11 @@ export default {
       const { name } = this.form;
       if (!name) return;
       const parent = this.config.parent;
+      const description = "";
       this.$apollo
         .mutate({
           mutation: CreateFolder,
-          variables: { name, parent },
+          variables: { name, parent, description },
           update: (store, { data: { createFolder } }) => {
             const variables = parent ? { parent } : {};
             try {
@@ -51,11 +52,14 @@ export default {
                 query: GetFolders,
                 variables
               });
-              data.getFolders.push(createFolder);
+              // Workaround for the issue when Query sometimes returns a read-only array
+              var newData = {}
+              newData.getFolders = data.getFolders.slice();
+              newData.getFolders.push(createFolder);
               store.writeQuery({
                 query: GetFolders,
                 variables,
-                data
+                data: newData
               });
             } catch (err) {
               console.log(err);

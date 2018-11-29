@@ -118,12 +118,12 @@ const resolvers = {
             const token = jwt.sign({ id: user.id, email }, JWT_SECRET)
             return { token, user }
         },
-        async createFolder(_, { parent, name }, context) {
+        async createFolder(_, { parent, name, description }, context) {
             const userId = getUserId(context)
             const folder = await Folder.create({
                 name,
                 parent: parent || undefined,
-                description: "Please provide a description.",
+                description,
                 shareWith: parent ? [] : [{
                     kind: 'Team',
                     item: (await User.findById(userId)).team
