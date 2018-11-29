@@ -27,7 +27,7 @@
   </div>
 </template>
 <script>
-import { UpdateFolder, GetFolders } from "../constants/query.gql";
+import { UpdateFolder } from "../constants/query.gql";
 export default {
   data() {
     return {
@@ -43,7 +43,6 @@ export default {
     updateFolder(e) {
       const name = this.folderName;
       const description = this.folderDescription;
-      const parent = this.folder.parent;
       if (
         name === this.folder.name &&
         description === this.folder.description
