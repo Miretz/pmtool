@@ -123,6 +123,7 @@ const resolvers = {
             const folder = await Folder.create({
                 name,
                 parent: parent || undefined,
+                description: "Please provide a description.",
                 shareWith: parent ? [] : [{
                     kind: 'Team',
                     item: (await User.findById(userId)).team

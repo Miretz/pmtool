@@ -2,12 +2,13 @@
   <div class="white card max-height">
     <div class="folder-header">
       <form @submit.prevent="updateFolder">
-        <input class="no-outline header-title folder-name" type="text" name="taskname" ref="taskname"
-          v-model="folderName" @keyup.esc="cancel">
-        </input>
+        <input class="no-outline header-title folder-name" type="text" name="taskname" ref="taskname" v-model="folderName" @keyup.esc="cancel" />
+      </form>
+      <form @submit.prevent="updateFolder">
+        <textarea class="no-outline header-title folder-description" rows="4" name="taskdesc" ref="taskdesc" v-model="folderDescription" />
+        <button class="btn btn-large"><i class="fa fa-save"></i>&nbsp;Save</button>
       </form>
     </div>
-   
   </div>
 </template>
 <script>
@@ -16,6 +17,7 @@ export default {
   data() {
     return {
       folderName: this.folder.name,
+      folderDescription: this.folder.description,
     }
   },
   props: ['folder'],
@@ -25,13 +27,14 @@ export default {
   methods: {
     updateFolder(e) {
       const name = this.folderName
-      if (name === this.folder.name) {
+      const description = this.folderDescription
+      if (name === this.folder.name && description === this.folder.description) {
         this.cancel(e)
         return
       }
       this.$apollo.mutate({
         mutation: UpdateFolder,
-        variables: { id: this.folder.id, input: {name} },
+        variables: { id: this.folder.id, input: {name: name, description: description} },
       }).then(() => {
         this.cancel(e)
       }).catch((error) => {

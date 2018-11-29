@@ -4,7 +4,8 @@
       <div class="white card max-height">
         <div class="folder-header">
           <div class="header-title folder-name">{{folder.name}}</div>
-        </div>
+          <pre><div class="header-title folder-description">{{folder.description}}</div></pre>
+        </div>        
       </div>
     </el-col>
     <el-col v-if="!isTeam(folder) && subRoute==='folder'" :span="12" class="max-height">
@@ -41,6 +42,7 @@ export default {
       result({ data: { getFolder } }) {
         this.folder = getFolder;
         this.folderName = this.folder.name;
+        this.folderDescription = this.folder.description;
         if (this.isTeam) {
           document.title = `${this.folder.name} - pmtool`;
         }
@@ -65,6 +67,13 @@ export default {
   margin: 5px 0;
   height: 32px;
   width: 100%;
+}
+.folder-description {
+  padding: 0;
+  margin: 5px 0;
+  height: auto;
+  width: 100%;
+  background-color: lightgray;
 }
 .menu-title {
   margin: 0 5px;
