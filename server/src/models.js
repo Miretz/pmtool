@@ -15,6 +15,8 @@ const Folder = buildModel('Folder', {
         item: { type: ObjectId, refPath: 'shareWith.kind' }
     }],
     parent: { type: ObjectId, ref: 'Folder' },
+    startDate: Date,
+    endDate: Date
 })
 
 module.exports.Folder = Folder

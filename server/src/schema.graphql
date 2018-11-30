@@ -6,6 +6,8 @@ type Folder {
   name: String
   parent: String
   description: String
+  startDate: Date
+  endDate: Date
   shareWith: [JSON]
 }
 
@@ -53,6 +55,8 @@ input FolderInput {
   parent: String
   description: String
   shareWith: [ShareInput]
+  startDate: Date
+  endDate: Date
 }
 input ShareInput {
   kind: String

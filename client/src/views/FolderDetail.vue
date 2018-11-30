@@ -14,12 +14,37 @@
       <textarea
         class="header-title folder-description"
         placeholder="Please describe your project"
-        rows="4"
+        rows="8"
         name="taskdesc"
         ref="taskdesc"
         v-model="folderDescription"
         @keyup.esc="cancel"
       />
+      <div class="col-25">
+        <span>Start date:</span>
+      </div>
+      <div class="col-75">
+        <datepicker
+          :value="folderStartDate"
+          :format="customFormatter"
+          name="startDatePk"
+          id="startDatePk"
+          v-model="folderStartDate"
+        ></datepicker>
+      </div>
+      <div class="col-25">
+        <span>End date:</span>
+      </div>
+      <div class="col-75">
+        <datepicker
+          :value="folderEndDate"
+          :format="customFormatter"
+          name="endDatePk"
+          id="endDatePk"
+          v-model="folderEndDate"
+        ></datepicker>
+      </div>
+      <br>
       <el-button type="primary" @click="updateFolder">
         <i class="fa fa-save"></i>&nbsp;Save
       </el-button>
@@ -28,11 +53,18 @@
 </template>
 <script>
 import { UpdateFolder } from "../constants/query.gql";
+import Datepicker from "vuejs-datepicker";
+import moment from "moment";
 export default {
+  components: {
+    Datepicker
+  },
   data() {
     return {
       folderName: this.folder.name,
-      folderDescription: this.folder.description
+      folderDescription: this.folder.description,
+      folderStartDate: this.folder.startDate,
+      folderEndDate: this.folder.endDate
     };
   },
   props: ["folder"],
@@ -43,9 +75,13 @@ export default {
     updateFolder(e) {
       const name = this.folderName;
       const description = this.folderDescription;
+      const startDate = this.folderStartDate;
+      const endDate = this.folderEndDate;
       if (
         name === this.folder.name &&
-        description === this.folder.description
+        description === this.folder.description &&
+        startDate === this.folder.startDate &&
+        endDate === this.folder.endDate
       ) {
         this.cancel(e);
         return;
@@ -53,7 +89,10 @@ export default {
       this.$apollo
         .mutate({
           mutation: UpdateFolder,
-          variables: { id: this.folder.id, input: { name, description } }
+          variables: {
+            id: this.folder.id,
+            input: { name, description, startDate, endDate }
+          }
         })
         .then(() => {
           this.cancel(e);
@@ -64,6 +103,9 @@ export default {
     },
     cancel(e) {
       e.target.blur();
+    },
+    customFormatter(value) {
+      return moment(value).format("MM-DD-YYYY");
     }
   }
 };

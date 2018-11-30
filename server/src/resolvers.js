@@ -127,7 +127,9 @@ const resolvers = {
                 shareWith: parent ? [] : [{
                     kind: 'Team',
                     item: (await User.findById(userId)).team
-                }]
+                }],
+                startDate: moment().toDate(),
+                endDate: moment().toDate()
             })
             return await Folder.findById(folder.id).populate('shareWith.item')
         },

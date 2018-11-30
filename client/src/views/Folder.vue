@@ -5,6 +5,8 @@
         <div class="folder-header">
           <div class="header-title folder-name">{{folder.name}}</div>
           <pre><div class="header-title folder-description">{{folder.description}}</div></pre>
+          <div class="header-title">Start date: {{folder.startDate | formatDate}}</div>
+          <div class="header-title">End date: {{folder.endDate | formatDate}}</div>
         </div>        
       </div>
     </el-col>
@@ -31,7 +33,9 @@ export default {
       folderDescription: "",
       folder: {
         shareWith: []
-      }
+      },
+      startDate: "",
+      endDate: ""
     };
   },
   apollo: {

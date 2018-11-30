@@ -7,6 +7,7 @@ import { HttpLink } from 'apollo-link-http'
 import { enableExperimentalFragmentVariables } from 'graphql-tag'
 import VueApollo from 'vue-apollo'
 import ElementUI from 'element-ui'
+import moment from 'moment'
 
 import App from './App.vue'
 import router from './router'
@@ -34,6 +35,12 @@ const cache = new InMemoryCache({
     },
   }
 })
+
+Vue.filter('formatDate', function (value) {
+  if (value) {
+    return moment(value).format("MM-DD-YYYY")
+  }
+});
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)

@@ -38,6 +38,8 @@ fragment FolderFields on Folder {
   parent
   description
   shareWith
+  startDate
+  endDate
 }
 
 query GetFolders($parent: String) {
