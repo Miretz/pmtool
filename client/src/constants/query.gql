@@ -40,6 +40,7 @@ fragment FolderFields on Folder {
   shareWith
   startDate
   endDate
+  createdBy
 }
 
 query GetFolders($parent: String) {
@@ -62,4 +63,18 @@ mutation UpdateFolder($id: String!, $input: FolderInput) {
 
 mutation DeleteFolder($id: String!) {
   deleteFolder(id: $id)
+}
+
+query GetUserById($id: String!) {
+  getUserById(id: $id){
+    id
+    name
+    firstname
+    lastname
+    email
+    avatarColor
+    jobTitle
+    team
+    role
+  }
 }

@@ -7,6 +7,7 @@
           <pre><div class="header-title folder-description">{{folder.description}}</div></pre>
           <div class="header-title">Start date: {{folder.startDate | formatDate}}</div>
           <div class="header-title">End date: {{folder.endDate | formatDate}}</div>
+          <div class="header-title">Created by: {{createdBy}}</div>
         </div>        
       </div>
     </el-col>
@@ -16,7 +17,7 @@
   </el-row>
 </template>
 <script>
-import { GetFolder } from "../constants/query.gql";
+import { GetFolder, GetUserById } from "../constants/query.gql";
 import FolderDetail from "./FolderDetail.vue";
 export default {
   components: {
@@ -35,7 +36,8 @@ export default {
         shareWith: []
       },
       startDate: "",
-      endDate: ""
+      endDate: "",
+      createdBy: "",
     };
   },
   apollo: {
@@ -51,6 +53,17 @@ export default {
         if (this.isTeam) {
           document.title = `${this.folder.name} - pmtool`;
         }
+        this.createdBy = this.folder.createdBy;
+      }
+    },
+    getUserById: {
+      query: GetUserById,
+      variables(){
+        return { id: this.createdBy }
+      },
+      result({ data: {getUserById}}){
+        const user = getUserById
+        this.createdBy = `${user.name} (${user.jobTitle})`
       }
     }
   },

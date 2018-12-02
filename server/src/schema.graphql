@@ -8,6 +8,7 @@ type Folder {
   description: String
   startDate: Date
   endDate: Date
+  createdBy: String
   shareWith: [JSON]
 }
 
@@ -15,6 +16,7 @@ type Query {
   getTeam: Team
   getFolders(parent: String): [Folder]
   getFolder(id: String!): Folder
+  getUserById(id: String!): User
 }
 
 type Team {

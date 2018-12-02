@@ -16,7 +16,8 @@ const Folder = buildModel('Folder', {
     }],
     parent: { type: ObjectId, ref: 'Folder' },
     startDate: Date,
-    endDate: Date
+    endDate: Date,
+    createdBy: String
 })
 
 module.exports.Folder = Folder

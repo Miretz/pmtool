@@ -63,6 +63,10 @@ const resolvers = {
             const userId = getUserId(context)
             return await Folder.findById(id).populate('shareWith')
         },
+        async getUserById(_, { id }, context) {
+            const userId = getUserId(context)
+            return await User.findById(id)
+        },
     },
     Mutation: {
         async captureEmail(_, { email }) {
@@ -82,6 +86,9 @@ const resolvers = {
         },
         async signup(_, { id, firstname, lastname, password }) {
             const user = await User.findById(id)
+            if (user.status === 'Active') {
+                throw new Error('This user is already active')
+            }
             const common = {
                 firstname,
                 lastname,
@@ -129,7 +136,8 @@ const resolvers = {
                     item: (await User.findById(userId)).team
                 }],
                 startDate: moment().toDate(),
-                endDate: moment().toDate()
+                endDate: moment().toDate(),
+                createdBy: userId
             })
             return await Folder.findById(folder.id).populate('shareWith.item')
         },
