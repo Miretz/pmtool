@@ -1,5 +1,9 @@
 <template>
   <div>
+    <div class="header">
+    <div><h1>PMTOOL</h1></div>
+    <div @click="logout" class="logout"><i class="fa fa-sign-out-alt"></i>&nbsp;Logout</div>
+    </div>
     <div class="container">
       <aside class="tree-root">
         <div v-if="getTeam.id" class="tree-item"
@@ -24,6 +28,7 @@
         </FolderTree>
       </aside>
 
+      
       <div class="workspace-main">
         <router-view :key="$route.fullPath"></router-view>
       </div>
@@ -70,6 +75,16 @@ export default {
       this.$store.commit('changeActiveWidget', null)
       this.showModal = true
     },
+    logout(){
+      this.$apollo.provider.clients.defaultClient.cache.reset();
+      this.removeUserData()
+      this.$router.push({ name: "home" });
+    },
+    removeUserData() {
+      localStorage.removeItem("user-id");
+      localStorage.removeItem("user-token");
+      this.$root.$data.userId = null;      
+    }
   }
 }
 </script>

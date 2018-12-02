@@ -65,7 +65,10 @@ export default {
       result({ data: { getFolder } }) {
         this.folder = getFolder;
         this.folderName = this.folder.name;
-        this.folderDescription = (this.folder.description==="")? "Project description is empty.\n" : this.folder.description;
+        this.folderDescription =
+          this.folder.description === ""
+            ? "Project description is empty.\n"
+            : this.folder.description;
         if (this.isTeam) {
           document.title = `${this.folder.name} - pmtool`;
         }
@@ -74,8 +77,11 @@ export default {
     },
     getUserById: {
       query: GetUserById,
+      skip() {
+        return this.folder.createdBy == null || this.folder.createdBy === "";
+      },
       variables() {
-        return { id: this.createdBy };
+        return { id: this.folder.createdBy };
       },
       result({ data: { getUserById } }) {
         const user = getUserById;

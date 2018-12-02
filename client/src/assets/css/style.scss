@@ -14,7 +14,7 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   margin: 0;
-  padding: 8px 0;
+  padding: 4px 4px;
 }
 
 ul, li {
@@ -516,4 +516,15 @@ ul.tree {
   margin-top: 6px;
   height: 40px;
   vertical-align: -webkit-baseline-middle;
+}
+
+.header {
+  display: flex;
+}
+
+.logout {
+  position: absolute;
+  right: 20px;
+  padding: 15px 0;
+  cursor: pointer;
 }
