@@ -24,6 +24,7 @@ Vue.config.productionTip = false
 Vue.component('plus-button', PlusButton)
 
 const uri = `${process.env.VUE_APP_URI}/graphql`
+const dateFormat = `${process.env.VUE_APP_DATE_FORMAT}`
 const httpLink = new HttpLink({ uri })
 
 const cache = new InMemoryCache({
@@ -38,7 +39,7 @@ const cache = new InMemoryCache({
 
 Vue.filter('formatDate', function (value) {
   if (value) {
-    return moment(value).format("MM-DD-YYYY")
+    return moment(value).format(dateFormat)
   }
 });
 

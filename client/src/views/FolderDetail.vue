@@ -105,7 +105,7 @@ export default {
       e.target.blur();
     },
     customFormatter(value) {
-      return moment(value).format("MM-DD-YYYY");
+      return moment(value).format(`${process.env.VUE_APP_DATE_FORMAT}`);
     }
   }
 };
