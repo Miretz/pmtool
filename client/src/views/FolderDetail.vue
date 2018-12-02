@@ -3,7 +3,7 @@
     <div class="folder-header">
       <form @submit.prevent="updateFolder">
         <input
-          class="no-outline header-title folder-name"
+          class="no-outline folder-name"
           type="text"
           name="taskname"
           ref="taskname"
@@ -11,6 +11,7 @@
           @keyup.esc="cancel"
         >
       </form>
+      <div class="header-title">Project description:</div>
       <textarea
         class="header-title folder-description"
         placeholder="Please describe your project"
@@ -21,7 +22,7 @@
         @keyup.esc="cancel"
       />
       <div class="col-25">
-        <span>Start date:</span>
+        <div class="header-title">Project start date:</div>
       </div>
       <div class="col-75">
         <datepicker
@@ -33,7 +34,7 @@
         ></datepicker>
       </div>
       <div class="col-25">
-        <span>End date:</span>
+        <div class="header-title">Project end date:</div>
       </div>
       <div class="col-75">
         <datepicker
@@ -113,7 +114,6 @@ export default {
 <style scoped>
 .folder-header {
   padding: 15px 24px 0;
-  line-height: 21px;
   min-height: 40px;
 }
 .folder-statebar {
@@ -126,9 +126,10 @@ export default {
 }
 .folder-name {
   padding: 0;
-  margin: 5px 0;
-  height: 32px;
+  margin: 40px 0;
+  height: auto;
   width: 100%;
+  font-size: xx-large;
 }
 .shared-with {
   padding-left: 7px;

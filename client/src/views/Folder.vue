@@ -3,12 +3,28 @@
     <el-col :span="12" class="max-height">
       <div class="white card max-height">
         <div class="folder-header">
-          <div class="header-title folder-name">{{folder.name}}</div>
-          <pre><div class="header-title folder-description">{{folder.description}}</div></pre>
-          <div class="header-title">Start date: {{folder.startDate | formatDate}}</div>
-          <div class="header-title">End date: {{folder.endDate | formatDate}}</div>
-          <div class="header-title">Created by: {{createdBy}}</div>
-        </div>        
+          <div class="folder-name">{{folder.name}}</div>
+          <div class="header-title">Project description:</div>
+          <pre><div class="header-title folder-description">{{folderDescription}}</div></pre>
+          <div class="col-25">
+            <div class="header-title">Project start date:</div>
+          </div>
+          <div class="col-75">
+            <div class="header-title">{{folder.startDate | formatDate}}</div>
+          </div>
+          <div class="col-25">
+            <div class="header-title">Project end date:</div>
+          </div>
+          <div class="col-75">
+            <div class="header-title">{{folder.endDate | formatDate}}</div>
+          </div>
+          <div class="col-25">
+            <div class="header-title">Created by:</div>
+          </div>
+          <div class="col-75">
+            <div class="header-title">{{createdBy}}</div>
+          </div>
+        </div>
       </div>
     </el-col>
     <el-col v-if="!isTeam(folder) && subRoute==='folder'" :span="12" class="max-height">
@@ -37,7 +53,7 @@ export default {
       },
       startDate: "",
       endDate: "",
-      createdBy: "",
+      createdBy: ""
     };
   },
   apollo: {
@@ -49,7 +65,7 @@ export default {
       result({ data: { getFolder } }) {
         this.folder = getFolder;
         this.folderName = this.folder.name;
-        this.folderDescription = this.folder.description;
+        this.folderDescription = (this.folder.description==="")? "Project description is empty.\n" : this.folder.description;
         if (this.isTeam) {
           document.title = `${this.folder.name} - pmtool`;
         }
@@ -58,12 +74,12 @@ export default {
     },
     getUserById: {
       query: GetUserById,
-      variables(){
-        return { id: this.createdBy }
+      variables() {
+        return { id: this.createdBy };
       },
-      result({ data: {getUserById}}){
-        const user = getUserById
-        this.createdBy = `${user.name} (${user.jobTitle})`
+      result({ data: { getUserById } }) {
+        const user = getUserById;
+        this.createdBy = `${user.name} (${user.jobTitle})`;
       }
     }
   },
@@ -77,14 +93,14 @@ export default {
 <style>
 .folder-header {
   padding: 15px 24px 0;
-  line-height: 21px;
   min-height: 40px;
 }
 .folder-name {
   padding: 0;
-  margin: 5px 0;
-  height: 32px;
+  margin: 40px 0;
+  height: auto;
   width: 100%;
+  font-size: xx-large;
 }
 .folder-description {
   margin: 5px 0;
