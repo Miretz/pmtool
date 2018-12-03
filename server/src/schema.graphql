@@ -60,6 +60,7 @@ input FolderInput {
   startDate: Date
   endDate: Date
 }
+
 input ShareInput {
   kind: String
   item: String
