@@ -13,8 +13,11 @@
               <i class="fas fa-arrow-left"></i>&nbsp;
             </div>
             {{folder.name}}
+            <div class="toggle-editor" v-if="!isTeam(folder) && subRoute==='folder'">
+              <el-button @click="toggleEditor" icon="el-icon-edit"></el-button>
+            </div>
           </div>
-          <div>
+          <div v-if="!isTeam(folder) && subRoute==='folder'">
             <h3>Project details</h3>
             <el-row>
               <el-col :span="24">
@@ -81,7 +84,7 @@
         </div>
       </div>
     </el-col>
-    <el-col v-if="!isTeam(folder) && subRoute==='folder'" :span="12">
+    <el-col v-if="!isTeam(folder) && subRoute==='folder' && showEditor" :span="12">
       <FolderDetail :folder="folder"></FolderDetail>
     </el-col>
   </el-row>
@@ -118,7 +121,8 @@ export default {
       startDate: "",
       endDate: "",
       createdBy: "",
-      getFolders: []
+      getFolders: [],
+      showEditor: false
     };
   },
   apollo: {
@@ -169,6 +173,9 @@ export default {
   methods: {
     isTeam(folder) {
       return !folder.parent && folder.shareWith.length === 0;
+    },
+    toggleEditor: function() {
+      this.showEditor = !this.showEditor;
     }
   }
 };
@@ -206,5 +213,8 @@ export default {
 .task-container {
   flex-grow: 1;
   overflow: scroll;
+}
+.toggle-editor {
+  float: right;
 }
 </style>
