@@ -12,9 +12,14 @@ body {
   background: #fff;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h4, h5, h6 {
   margin: 0;
   padding: 4px 4px;
+}
+
+h3 {
+  margin: 0;
+  padding: 20px 0;
 }
 
 ul, li {
@@ -24,14 +29,14 @@ ul, li {
 
 textarea {
   outline: none;
-  border: 1px solid #eee;
   background-color: #f8f8f8;
-  box-sizing: border-box;
   border: 2px solid #ccc;
   border-radius: 4px;
-  //resize: none;
+  box-sizing: border-box;
   padding: 4px;
   font-size: inherit;
+  width: 100%;
+  margin: 4px 0;
 }
 
 input {
@@ -94,6 +99,7 @@ a.link {
 .header-title {
   font-size: 18px;
   line-height: 21px;
+  margin-top: 5px;
 }
 
 .black-text-button, .black-text-button:focus {
@@ -496,26 +502,6 @@ ul.tree {
 
 .menu-item:hover {
   background-color: $hover;
-}
-
-.col-25 {
-  float: left;
-  width: 25%;
-  margin-top: 6px;
-  height: 40px;
-  vertical-align: -webkit-baseline-middle;
-}
-
-.col-25 span {
-  vertical-align: -webkit-baseline-middle;
-}
-
-.col-75 {
-  float: left;
-  width: 75%;
-  margin-top: 6px;
-  height: 40px;
-  vertical-align: -webkit-baseline-middle;
 }
 
 .header {

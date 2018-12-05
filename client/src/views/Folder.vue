@@ -1,7 +1,7 @@
 <template>
-  <el-row class="max-height">
-    <el-col :span="12" class="max-height">
-      <div class="white card max-height">
+  <el-row>
+    <el-col :span="12">
+      <div class="white card">
         <div class="folder-header">
           <div class="folder-name">
             <div
@@ -14,28 +14,47 @@
             </div>
             {{folder.name}}
           </div>
-          <div class="header-title">Project description:</div>
-          <pre><div class="header-title folder-description">{{folderDescription}}</div></pre>
-          <div class="col-25">
-            <div class="header-title">Project start date:</div>
-          </div>
-          <div class="col-75">
-            <div class="header-title">{{folder.startDate | formatDate}}</div>
-          </div>
-          <div class="col-25">
-            <div class="header-title">Project end date:</div>
-          </div>
-          <div class="col-75">
-            <div class="header-title">{{folder.endDate | formatDate}}</div>
-          </div>
-          <div class="col-25">
-            <div class="header-title">Created by:</div>
-          </div>
-          <div class="col-75">
-            <div class="header-title">{{createdBy}}</div>
+          <div>
+            <h3>Project details</h3>
+            <el-row>
+              <el-col :span="24">
+                <div class="header-title">Project description:</div>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="24">
+                <pre><div class="header-title folder-description">{{folderDescription}}</div></pre>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="6">
+                <div class="header-title">Created by:</div>
+              </el-col>
+              <el-col :span="18">
+                <div class="header-title">{{createdBy}}</div>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="6">
+                <div class="header-title">Start date:</div>
+              </el-col>
+              <el-col :span="18">
+                <div class="header-title">{{folder.startDate | formatDate}}</div>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="6">
+                <div class="header-title">End date:</div>
+              </el-col>
+              <el-col :span="18">
+                <div class="header-title">{{folder.endDate | formatDate}}</div>
+              </el-col>
+            </el-row>
           </div>
           <!-- List of subprojects -->
-          <div class="header-title" v-if="isFolder">List of subprojects</div>
+          <div class="header-title" v-if="isFolder">
+            <h3>List of subprojects</h3>
+          </div>
           <div class="subproject-list" v-if="isFolder">
             <div
               v-for="f in getFolders"
@@ -44,17 +63,25 @@
               :class="'subproject-elem'"
               @click.left.stop="$router.push({name: 'folder', params: {id: f.id}})"
             >
-              <div class="col-75">
-                <i class="far fa-folder-open"></i>
-                &nbsp;{{f.name}}
-              </div>
-              <div class="col-25">{{f.startDate | formatDate}} - {{f.endDate | formatDate}}</div>
+              <el-row>
+                <el-col :span="12">
+                  <div>
+                    <i class="far fa-folder-open"></i>
+                    &nbsp;{{f.name}}
+                  </div>
+                </el-col>
+                <el-col :span="12">
+                  <div
+                    class="header-title"
+                  >{{f.startDate | formatDate}} - {{f.endDate | formatDate}}</div>
+                </el-col>
+              </el-row>
             </div>
           </div>
         </div>
       </div>
     </el-col>
-    <el-col v-if="!isTeam(folder) && subRoute==='folder'" :span="12" class="max-height">
+    <el-col v-if="!isTeam(folder) && subRoute==='folder'" :span="12">
       <FolderDetail :folder="folder"></FolderDetail>
     </el-col>
   </el-row>
@@ -150,26 +177,27 @@ export default {
 .folder-header {
   padding: 15px 24px 0;
   min-height: 40px;
+  margin-bottom: 20px;
 }
 .folder-name {
   padding: 0;
-  margin: 40px 0;
+  margin: 20px 0;
   height: auto;
   width: 100%;
   font-size: xx-large;
 }
 .folder-description {
-  margin: 5px 0;
-  height: auto;
+  margin: 2px 0;
   width: 100%;
+  background-color: #f8f8f8;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  padding: 4px;
+  overflow: auto;
 }
-
 .menu-title {
   margin: 0 5px;
   font-size: 12px;
-}
-.max-height {
-  height: 100%;
 }
 .white.card {
   display: flex;

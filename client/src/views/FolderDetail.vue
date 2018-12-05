@@ -1,5 +1,5 @@
 <template>
-  <div class="white card max-height">
+  <div class="white card">
     <div class="folder-header">
       <form @submit.prevent="updateFolder">
         <input
@@ -11,9 +11,10 @@
           @keyup.esc="cancel"
         >
       </form>
+      <h3>Project details</h3>
       <div class="header-title">Project description:</div>
       <textarea
-        class="header-title folder-description"
+        class="header-title"
         placeholder="Please describe your project"
         rows="8"
         name="taskdesc"
@@ -21,34 +22,40 @@
         v-model="folderDescription"
         @keyup.esc="cancel"
       />
-      <div class="col-25">
-        <div class="header-title">Project start date:</div>
-      </div>
-      <div class="col-75">
-        <datepicker
-          :value="folderStartDate"
-          :format="customFormatter"
-          name="startDatePk"
-          id="startDatePk"
-          v-model="folderStartDate"
-        ></datepicker>
-      </div>
-      <div class="col-25">
-        <div class="header-title">Project end date:</div>
-      </div>
-      <div class="col-75">
-        <datepicker
-          :value="folderEndDate"
-          :format="customFormatter"
-          name="endDatePk"
-          id="endDatePk"
-          v-model="folderEndDate"
-        ></datepicker>
-      </div>
+      <el-row>
+        <el-col :span="6">
+          <div class="header-title">Start date:</div>
+        </el-col>
+        <el-col :span="18">
+          <datepicker
+            :value="folderStartDate"
+            :format="customFormatter"
+            name="startDatePk"
+            id="startDatePk"
+            v-model="folderStartDate"
+          ></datepicker>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="6">
+          <div class="header-title">End date:</div>
+        </el-col>
+        <el-col :span="18">
+          <datepicker
+            :value="folderEndDate"
+            :format="customFormatter"
+            name="endDatePk"
+            id="endDatePk"
+            v-model="folderEndDate"
+          ></datepicker>
+        </el-col>
+      </el-row>
       <br>
-      <el-button type="primary" @click="updateFolder">
-        <i class="fa fa-save"></i>&nbsp;Save
-      </el-button>
+      <el-row>
+        <el-col :span="24">
+          <el-button type="primary" @click="updateFolder" icon="el-icon-check">Save</el-button>
+        </el-col>
+      </el-row>
     </div>
   </div>
 </template>
@@ -115,6 +122,7 @@ export default {
 .folder-header {
   padding: 15px 24px 0;
   min-height: 40px;
+  margin-bottom: 20px;
 }
 .folder-statebar {
   display: flex;
@@ -126,7 +134,7 @@ export default {
 }
 .folder-name {
   padding: 0;
-  margin: 40px 0;
+  margin: 20px 0;
   height: auto;
   width: 100%;
   font-size: xx-large;
