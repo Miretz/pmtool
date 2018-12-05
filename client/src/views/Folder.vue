@@ -1,6 +1,6 @@
 <template>
   <el-row>
-    <el-col :span="12">
+    <el-col :span="showEditor ? 12 : 24">
       <div class="white card">
         <div class="folder-header">
           <div class="folder-name">
@@ -13,7 +13,7 @@
               <i class="fas fa-arrow-left"></i>&nbsp;
             </div>
             {{folder.name}}
-            <div class="toggle-editor" v-if="!isTeam(folder) && subRoute==='folder'">
+            <div class="float-right" v-if="!isTeam(folder) && subRoute==='folder'">
               <el-button @click="toggleEditor" icon="el-icon-edit"></el-button>
             </div>
           </div>
@@ -75,7 +75,7 @@
                 </el-col>
                 <el-col :span="12">
                   <div
-                    class="header-title"
+                    class="header-title float-right"
                   >{{f.startDate | formatDate}} - {{f.endDate | formatDate}}</div>
                 </el-col>
               </el-row>
@@ -214,7 +214,7 @@ export default {
   flex-grow: 1;
   overflow: scroll;
 }
-.toggle-editor {
+.float-right {
   float: right;
 }
 </style>
