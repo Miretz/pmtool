@@ -13,15 +13,7 @@
       </form>
       <h3>Project details</h3>
       <div class="header-title">Project description:</div>
-      <textarea
-        class="header-title"
-        placeholder="Please describe your project"
-        rows="8"
-        name="taskdesc"
-        ref="taskdesc"
-        v-model="folderDescription"
-        @keyup.esc="cancel"
-      />
+      <vue-editor v-model="folderDescription"></vue-editor>
       <el-row>
         <el-col :span="6">
           <div class="header-title">Start date:</div>
@@ -63,16 +55,18 @@
 import { UpdateFolder } from "../constants/query.gql";
 import Datepicker from "vuejs-datepicker";
 import moment from "moment";
+import { VueEditor } from "vue2-editor";
 export default {
   components: {
-    Datepicker
+    Datepicker,
+    VueEditor
   },
   data() {
     return {
       folderName: this.folder.name,
       folderDescription: this.folder.description,
       folderStartDate: this.folder.startDate,
-      folderEndDate: this.folder.endDate
+      folderEndDate: this.folder.endDate,
     };
   },
   props: ["folder"],

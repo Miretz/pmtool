@@ -22,7 +22,11 @@ h3 {
   padding: 20px 0;
 }
 
-ul, li {
+ul {
+  margin: 0;
+}
+
+ul li {
   list-style-type: none;
   margin: 0;
 }
@@ -536,3 +540,4 @@ ul.tree {
   padding: 4px;
   cursor: pointer;
 }
+

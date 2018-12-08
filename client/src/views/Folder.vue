@@ -26,7 +26,7 @@
             </el-row>
             <el-row>
               <el-col :span="24">
-                <pre><div class="header-title folder-description">{{folderDescription}}</div></pre>
+                <vue-editor v-model="folderDescription" :editorToolbar="[]" :disabled="true" :editorOptions="editorSettings"></vue-editor>
               </el-col>
             </el-row>
             <el-row>
@@ -93,9 +93,11 @@
 import { mapState } from "vuex";
 import { GetFolder, GetUserById, GetFolders } from "../constants/query.gql";
 import FolderDetail from "./FolderDetail.vue";
+import { VueEditor } from "vue2-editor";
 export default {
   components: {
-    FolderDetail
+    FolderDetail,
+    VueEditor
   },
   computed: {
     isFolder: function() {
@@ -123,6 +125,9 @@ export default {
       createdBy: "",
       getFolders: [],
       showEditor: this.$root.$data.showEditor,
+      editorSettings: {
+        modules: {toolbar: false}
+      }
     };
   },
   apollo: {
