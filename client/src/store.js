@@ -7,6 +7,7 @@ export default new Vuex.Store({
   state: {
     userId: localStorage.getItem('user-id'),
     activeWidget: null,
+    showEditor: false,
   },
   mutations: {
     changeActiveWidget(state, key) {

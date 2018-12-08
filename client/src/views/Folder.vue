@@ -122,7 +122,7 @@ export default {
       endDate: "",
       createdBy: "",
       getFolders: [],
-      showEditor: false
+      showEditor: this.$root.$data.showEditor,
     };
   },
   apollo: {
@@ -176,6 +176,7 @@ export default {
     },
     toggleEditor: function() {
       this.showEditor = !this.showEditor;
+      this.$root.$data.showEditor = this.showEditor;
     }
   }
 };
