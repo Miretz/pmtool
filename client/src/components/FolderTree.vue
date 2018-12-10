@@ -103,14 +103,15 @@ export default {
               query: GetFolders,
               variables
             });
-            data.getFolders.splice(
-              data.getFolders.findIndex(o => o.id === id),
-              1
-            );
+            const indexToRemove = data.getFolders.findIndex(o => o.id === id);
+            // Workaround for deletion issue - creating a new object instead of changing data
+            var newData = {};
+            newData.getFolders = data.getFolders.slice();
+            newData.getFolders.splice(indexToRemove, 1);
             store.writeQuery({
               query: GetFolders,
               variables,
-              data
+              data: newData
             });
           }
         })

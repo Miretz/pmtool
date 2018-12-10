@@ -3,6 +3,7 @@ const moment = require('moment')
 const bcrypt = require('bcrypt')
 var jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
+mongoose.set('useFindAndModify', false);
 const ObjectId = mongoose.Types.ObjectId
 const { User, Team, Folder, Group } = require('./models')
 const JWT_SECRET = process.env.JWT_SECRET
