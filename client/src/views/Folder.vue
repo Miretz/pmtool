@@ -124,7 +124,7 @@ export default {
       endDate: "",
       createdBy: "",
       getFolders: [],
-      showEditor: this.$root.$data.showEditor,
+      showEditor: (localStorage.getItem('show-editor') === 'true'),
       editorSettings: {
         modules: {toolbar: false}
       }
@@ -181,7 +181,7 @@ export default {
     },
     toggleEditor: function() {
       this.showEditor = !this.showEditor;
-      this.$root.$data.showEditor = this.showEditor;
+      localStorage.setItem('show-editor', JSON.stringify(this.showEditor));
     }
   }
 };
