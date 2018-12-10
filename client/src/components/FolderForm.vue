@@ -53,8 +53,9 @@ export default {
                 variables
               });
               // Workaround for the issue when Query sometimes returns a read-only array
-              var newData = {};
-              newData.getFolders = data.getFolders.slice();
+              let newData = {
+                getFolders: data.getFolders.slice()
+              };
               newData.getFolders.push(createFolder);
               store.writeQuery({
                 query: GetFolders,
