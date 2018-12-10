@@ -1,5 +1,5 @@
 <template name="tree">
-  <li>
+  <li class="tree-list-item">
     <div
       class="tree-item"
       @click.right.stop.prevent="$store.commit('changeActiveWidget', `folder${model.id}`)"
