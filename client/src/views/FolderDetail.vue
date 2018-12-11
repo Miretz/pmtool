@@ -66,7 +66,7 @@ export default {
       folderName: this.folder.name,
       folderDescription: this.folder.description,
       folderStartDate: this.folder.startDate,
-      folderEndDate: this.folder.endDate,
+      folderEndDate: this.folder.endDate
     };
   },
   props: ["folder"],
@@ -76,6 +76,10 @@ export default {
   methods: {
     updateFolder(e) {
       const name = this.folderName;
+      if (name === "") {
+        this.cancel(e);
+        return;
+      }
       const description = this.folderDescription;
       const startDate = this.folderStartDate;
       const endDate = this.folderEndDate;

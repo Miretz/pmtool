@@ -1,16 +1,23 @@
 <template>
   <div>
     <div class="header">
-    <div><h1>PMTOOL</h1></div>
-    <div @click="logout" class="logout"><i class="fa fa-sign-out-alt"></i>&nbsp;Logout</div>
+      <div @click="reloadPage" class="pointer">
+        <h1>PMTOOL</h1>
+      </div>
+      <div @click="logout" class="logout">
+        <i class="fa fa-sign-out-alt"></i>&nbsp;Logout
+      </div>
     </div>
     <div class="container">
       <aside class="tree-root">
-        <div v-if="getTeam.id" class="tree-item"
-            @click.right.stop.prevent="$store.commit('changeActiveWidget', `folder${getTeam.id}`)"
-            @click.left.stop="$router.push({name: 'folder', params: {id: getTeam.id}})">
-          <div class="tree-plate"  v-bind:class="{active: $route.params.id === getTeam.id}">
-            <div class="circle"></div>              
+        <div
+          v-if="getTeam.id"
+          class="tree-item"
+          @click.right.stop.prevent="$store.commit('changeActiveWidget', `folder${getTeam.id}`)"
+          @click.left.stop="$router.push({name: 'folder', params: {id: getTeam.id}})"
+        >
+          <div class="tree-plate" v-bind:class="{active: $route.params.id === getTeam.id}">
+            <div class="circle"></div>
             <span class="folder no-select-color teamname">{{ getTeam.name }}</span>
             <plus-button @click="openModal" color="white"></plus-button>
 
@@ -24,69 +31,69 @@
           v-for="folder in getFolders"
           :key="folder.id"
           :model="folder"
-          :team="getTeam.id" >
-        </FolderTree>
+          :team="getTeam.id"
+        ></FolderTree>
       </aside>
 
-      
       <div class="workspace-main">
         <router-view :key="$route.fullPath"></router-view>
       </div>
 
       <FolderForm v-if="showModal" :config="{parent: ''}" @close="showModal = false"></FolderForm>
     </div>
-
   </div>
-
 </template>
 
 <script>
-import { mapState } from  'vuex'
-import FolderTree from '@/components/FolderTree'
-import FolderForm from '@/components/FolderForm'
-import { GetFolders, GetTeam } from '../constants/query.gql'
+import { mapState } from "vuex";
+import FolderTree from "@/components/FolderTree";
+import FolderForm from "@/components/FolderForm";
+import { GetFolders, GetTeam } from "../constants/query.gql";
 
 export default {
   components: {
     FolderTree,
-    FolderForm,
+    FolderForm
   },
-  computed: mapState(['activeWidget']),
+  computed: mapState(["activeWidget"]),
   data() {
     return {
       showModal: false,
       getFolders: [],
       getTeam: {}
-    }
+    };
   },
   apollo: {
     getTeam: {
-      query: GetTeam,
+      query: GetTeam
     },
     getFolders: {
       query: GetFolders,
       error(error) {
-        console.error(error)
-      },
+        console.error(error);
+      }
     }
   },
   methods: {
     openModal() {
-      this.$store.commit('changeActiveWidget', null)
-      this.showModal = true
+      this.$store.commit("changeActiveWidget", null);
+      this.showModal = true;
     },
-    logout(){
+    logout() {
       this.$apollo.provider.clients.defaultClient.cache.reset();
-      this.removeUserData()
+      this.removeUserData();
       this.$router.push({ name: "home" });
     },
     removeUserData() {
       localStorage.removeItem("user-id");
       localStorage.removeItem("user-token");
-      this.$root.$data.userId = null;      
+      this.$root.$data.userId = null;
+    },
+    reloadPage() {
+      window.location.reload();
     }
   }
-}
+};
 </script>
 
 <style scoped>
@@ -110,5 +117,9 @@ aside {
 
 .workspace-main {
   flex: 1 1;
+}
+
+.pointer {
+  cursor: pointer;
 }
 </style>
