@@ -97,9 +97,7 @@
                   </div>
                 </el-col>
                 <el-col :span="12">
-                  <div
-                    class="header-title float-right"
-                  >{{f.startDate | formatDate}} - {{f.endDate | formatDate}}</div>
+                  <div class="float-right">{{f.startDate | formatDate}} - {{f.endDate | formatDate}}</div>
                 </el-col>
               </el-row>
             </div>
@@ -155,7 +153,7 @@ export default {
       showEditor: localStorage.getItem("show-editor") === "true",
       editorSettings: {
         modules: { toolbar: false }
-      },
+      }
     };
   },
   apollo: {
@@ -262,5 +260,20 @@ export default {
 }
 .float-right {
   float: right;
+}
+
+.subproject-list {
+  margin: 20px 4px;
+}
+
+.subproject-elem {
+  margin: 10px;
+  text-align: justify;
+  padding: 10px;
+  border: 1px solid #eee;
+  background-color: #e8e8e8;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
 }
 </style>
