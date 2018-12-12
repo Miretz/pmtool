@@ -17,7 +17,7 @@
               <el-button @click="toggleEditor" icon="el-icon-edit"></el-button>
             </div>
           </div>
-          <div v-if="!isTeam(folder) && subRoute==='folder'">
+          <div class="header-title" v-if="!isTeam(folder) && subRoute==='folder'">
             <h3>Project details</h3>
             <el-row>
               <el-col :span="24">
