@@ -17,6 +17,7 @@ type Query {
   getFolders(parent: String): [Folder]
   getFolder(id: String!): Folder
   getUserById(id: String!): User
+  getFolderTeams(id: String!): [Team]
 }
 
 type Team {

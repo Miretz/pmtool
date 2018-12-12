@@ -26,7 +26,12 @@
             </el-row>
             <el-row>
               <el-col :span="24">
-                <vue-editor v-model="folderDescription" :editorToolbar="[]" :disabled="true" :editorOptions="editorSettings"></vue-editor>
+                <vue-editor
+                  v-model="folderDescription"
+                  :editorToolbar="[]"
+                  :disabled="true"
+                  :editorOptions="editorSettings"
+                ></vue-editor>
               </el-col>
             </el-row>
             <el-row>
@@ -54,6 +59,24 @@
               </el-col>
             </el-row>
           </div>
+
+          <!-- List of project teams -->
+          <div class="header-title" v-if="isFolder">
+            <h3>Shared with</h3>
+          </div>
+          <div class="subproject-list" v-if="isFolder">
+            <div
+              v-for="f in getFolderTeams"
+              :key="f.id"
+              :model="folder"
+              :class="'subproject-elem'"
+              @click.left.stop="$router.push({name: 'folder', params: {id: f.id}})"
+            >
+              <i class="fas fa-users"></i>
+              &nbsp;{{f.name}}
+            </div>
+          </div>
+
           <!-- List of subprojects -->
           <div class="header-title" v-if="isFolder">
             <h3>List of subprojects</h3>
@@ -91,7 +114,12 @@
 </template>
 <script>
 import { mapState } from "vuex";
-import { GetFolder, GetUserById, GetFolders } from "../constants/query.gql";
+import {
+  GetFolder,
+  GetUserById,
+  GetFolders,
+  GetFolderTeams
+} from "../constants/query.gql";
 import FolderDetail from "./FolderDetail.vue";
 import { VueEditor } from "vue2-editor";
 export default {
@@ -124,10 +152,10 @@ export default {
       endDate: "",
       createdBy: "",
       getFolders: [],
-      showEditor: (localStorage.getItem('show-editor') === 'true'),
+      showEditor: localStorage.getItem("show-editor") === "true",
       editorSettings: {
-        modules: {toolbar: false}
-      }
+        modules: { toolbar: false }
+      },
     };
   },
   apollo: {
@@ -173,6 +201,18 @@ export default {
       error(error) {
         console.error(error);
       }
+    },
+    getFolderTeams: {
+      query: GetFolderTeams,
+      skip() {
+        return this.folder.id == null || this.folder.id === "";
+      },
+      variables() {
+        return { id: this.folder.id };
+      },
+      error(error) {
+        console.error(error);
+      }
     }
   },
   methods: {
@@ -181,7 +221,7 @@ export default {
     },
     toggleEditor: function() {
       this.showEditor = !this.showEditor;
-      localStorage.setItem('show-editor', JSON.stringify(this.showEditor));
+      localStorage.setItem("show-editor", JSON.stringify(this.showEditor));
     }
   }
 };

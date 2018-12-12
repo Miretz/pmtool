@@ -78,3 +78,10 @@ query GetUserById($id: String!) {
     role
   }
 }
+
+query GetFolderTeams($id: String!) {
+  getFolderTeams(id: $id){
+    id
+    name
+  }
+}
