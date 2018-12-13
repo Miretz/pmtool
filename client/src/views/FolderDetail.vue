@@ -1,16 +1,27 @@
 <template>
   <div class="white card">
     <div class="folder-header">
-      <form @submit.prevent="updateFolder">
-        <input
-          class="no-outline folder-name"
-          type="text"
-          name="taskname"
-          ref="taskname"
-          v-model="folderName"
-          @keyup.esc="cancel"
-        >
-      </form>
+      <div class="folder-name">
+        <el-row>
+          <el-col :span="18">
+            <form @submit.prevent="updateFolder">
+              <input
+                class="no-outline"
+                type="text"
+                name="taskname"
+                ref="taskname"
+                v-model="folderName"
+                @keyup.esc="cancel"
+              >
+            </form>
+          </el-col>
+          <el-col :span="6">
+            <div class="float-right">
+              <el-button @click="hideEditor" icon="el-icon-close"></el-button>
+            </div>
+          </el-col>
+        </el-row>
+      </div>
       <h3>Project details</h3>
       <div class="header-title">Project description:</div>
       <vue-editor v-model="folderDescription"></vue-editor>
@@ -112,6 +123,9 @@ export default {
     },
     customFormatter(value) {
       return moment(value).format(`${process.env.VUE_APP_DATE_FORMAT}`);
+    },
+    hideEditor: function() {
+      this.$emit("hideEditor");
     }
   }
 };
@@ -175,5 +189,8 @@ export default {
 }
 .label {
   text-align: left;
+}
+.float-right {
+  float: right;
 }
 </style>

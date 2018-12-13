@@ -106,7 +106,7 @@
       </div>
     </el-col>
     <el-col v-if="!isTeam(folder) && subRoute==='folder' && showEditor" :span="12">
-      <FolderDetail :folder="folder"></FolderDetail>
+      <FolderDetail :folder="folder" @hideEditor="toggleEditor"></FolderDetail>
     </el-col>
   </el-row>
 </template>
