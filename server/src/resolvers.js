@@ -166,8 +166,8 @@ const resolvers = {
                 item: (await User.findById(userId)).team
               }
             ],
-        startDate: moment().toDate(),
-        endDate: moment().toDate(),
+        startDate: moment().startOf("day").toDate(),
+        endDate: moment().startOf("day").toDate(),
         createdBy: userId
       });
       return await Folder.findById(folder.id).populate("shareWith.item");

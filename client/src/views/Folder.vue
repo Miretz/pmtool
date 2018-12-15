@@ -126,7 +126,6 @@ export default {
         if (this.isTeam) {
           document.title = `${this.folder.name} - pmtool`;
         }
-        this.createdBy = this.folder.createdBy;
       }
     },
     getUserById: {

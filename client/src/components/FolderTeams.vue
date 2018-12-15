@@ -1,9 +1,9 @@
 <template>
-  <div>
-    <div class="header-title" v-if="hasTeams">
+  <div v-if="hasTeams">
+    <div class="header-title">
       <h3>Shared with</h3>
     </div>
-    <div class="teams-list" v-if="hasTeams">
+    <div class="teams-list">
       <div
         v-for="f in getFolderTeams"
         :key="f.id"

@@ -108,12 +108,23 @@ export default {
         this.cancel(e);
         return;
       }
+      const correctedStartDate = moment(startDate)
+        .startOf("day")
+        .toDate();
+      const correctedEndDate = moment(endDate)
+        .startOf("day")
+        .toDate();
       this.$apollo
         .mutate({
           mutation: UpdateFolder,
           variables: {
             id: this.folder.id,
-            input: { name, description, startDate, endDate }
+            input: {
+              name,
+              description,
+              startDate: correctedStartDate,
+              endDate: correctedEndDate
+            }
           }
         })
         .then(() => {

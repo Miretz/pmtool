@@ -46,10 +46,10 @@
         <el-table-column prop="name" label="Name" width="120" fixed="left"></el-table-column>
         <el-table-column label="Date">
           <el-table-column
-            :prop="'date' + n"
-            :label="formatTooltip(n)"
-            :key="'date' + n"
-            v-for="n in allFoldersDuration()"
+            :prop="'date' + i"
+            :label="formatTooltip(i)"
+            :key="'date' + i"
+            v-for="(n, i) in allFoldersDuration()"
             :width="100"
           ></el-table-column>
         </el-table-column>
@@ -86,12 +86,8 @@ export default {
   },
   methods: {
     duration(startDate, endDate) {
-      const startDateDay = moment(startDate)
-        .startOf("day")
-        .clone();
-      const endDateDay = moment(endDate)
-        .startOf("day")
-        .clone();
+      const startDateDay = moment(startDate);
+      const endDateDay = moment(endDate);
       return Math.abs(endDateDay.diff(startDateDay, "days"));
     },
     doneAmount(f) {
@@ -101,10 +97,8 @@ export default {
       return this.duration(this.getFirstDate(), f.startDate);
     },
     getDateByIndex(value) {
-      return moment(this.getFirstDate())
-        .startOf("day")
-        .clone()
-        .add(value, "days");
+      if (value === 0) return this.getFirstDate();
+      return moment(this.getFirstDate()).add(value, "days");
     },
     formatTooltip(value) {
       return this.getDateByIndex(value).format(
@@ -112,41 +106,34 @@ export default {
       );
     },
     getFirstDate: function() {
-      const minDate = moment.min(this.getFolders.map(d => moment(d.startDate)));
-      return minDate.clone().startOf("day");
+      return moment.min(this.getFolders.map(d => moment(d.startDate)));
     },
     getLastDate: function() {
-      const maxDate = moment.max(this.getFolders.map(d => moment(d.endDate)));
-      return maxDate.clone().startOf("day");
+      return moment.max(this.getFolders.map(d => moment(d.endDate)));
     },
     allFoldersDuration: function() {
-      return this.duration(this.getFirstDate(), this.getLastDate());
-    },
-    isIndexInDateRange(index, start, end) {
-      return (
-        this.getDateByIndex(index).isSameOrAfter(
-          moment(start).startOf("day")
-        ) &&
-        this.getDateByIndex(index).isSameOrBefore(moment(end).startOf("day"))
-      );
+      return this.duration(this.getFirstDate(), this.getLastDate()) + 1;
     },
     getRanges: function() {
       let result = [];
+      const currentDay = new Date();
       for (let f of this.getFolders) {
         let row = {
           name: f.name
         };
-        for (let n = 0; n < this.allFoldersDuration(); n++) {
-          const dateColumn = "date" + n;
-          const styleColumn = "style" + n;
-          row[dateColumn] = "";
-          row[styleColumn] = "";
-          if (this.getDateByIndex(n).isSame(new Date(), "day")) {
-            row[dateColumn] = this.formatTooltip(n);
-            row[styleColumn] = "gttable-current-day";
-          } else if (this.isIndexInDateRange(n, f.startDate, f.endDate)) {
-            row[dateColumn] = this.formatTooltip(n);
-            row[styleColumn] = "gttable-running";
+        const from = this.modifyAmount(f);
+        const to = this.doneAmount(f);
+        const today = this.duration(this.getFirstDate(), currentDay);
+        for (let n = 0; n <= this.allFoldersDuration(); n++) {
+          if (n < from || n > to) {
+            row["date" + n] = "";
+            row["style" + n] = "";
+          } else if (n === today) {
+            row["date" + n] = this.formatTooltip(n);
+            row["style" + n] = "gttable-current-day";
+          } else {
+            row["date" + n] = this.formatTooltip(n);
+            row["style" + n] = "gttable-running";
           }
         }
         result.push(row);
@@ -157,7 +144,7 @@ export default {
     cellClassName({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 0) return "";
       let tableRow = this.ranges[rowIndex];
-      return tableRow["style" + columnIndex];
+      return tableRow["style" + (columnIndex - 1)];
     },
     days(val) {
       return val === 1 ? `${val} day` : `${val} days`;
