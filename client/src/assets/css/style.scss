@@ -525,11 +525,19 @@ ul.tree {
   cursor: pointer;
 }
 
-.project-running {
+.gttable-running {
   background: #66b1ff  !important;;
 }
 
-.project-running:hover {
+.gttable-running:hover {
   background: #85c0ff !important;
+}
+
+.gttable-current-day {
+  background: #ff9b66  !important;;
+}
+
+.gttable-current-day:hover {
+  background: #ff9b66 !important;
 }
 

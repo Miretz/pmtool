@@ -141,9 +141,12 @@ export default {
           const styleColumn = "style" + n;
           row[dateColumn] = "";
           row[styleColumn] = "";
-          if (this.isIndexInDateRange(n, f.startDate, f.endDate)) {
+          if (this.getDateByIndex(n).isSame(new Date(), "day")) {
             row[dateColumn] = this.formatTooltip(n);
-            row[styleColumn] = "project-running";
+            row[styleColumn] = "gttable-current-day";
+          } else if (this.isIndexInDateRange(n, f.startDate, f.endDate)) {
+            row[dateColumn] = this.formatTooltip(n);
+            row[styleColumn] = "gttable-running";
           }
         }
         result.push(row);
