@@ -41,22 +41,20 @@
     <div class="header-title">
       <h3>Detailed plan</h3>
     </div>
-    <el-row>
-      <el-col :span="24">
-        <div class="gantt-chart">
-          <el-table :data="getRanges()" border style="width: 100%" :cell-class-name="cellClassName">
-            <el-table-column prop="name" label="Name" width="100"></el-table-column>
-            <el-table-column
-              :prop="'date' + n"
-              :label="formatTooltip(n)"
-              :key="'date' + n"
-              v-for="n in allFoldersDuration()"
-              :width="75"
-            ></el-table-column>
-          </el-table>
-        </div>
-      </el-col>
-    </el-row>
+    <div class="gantt-chart">
+      <el-table :data="getRanges()" border style="width: 100%" :cell-class-name="cellClassName">
+        <el-table-column prop="name" label="Name" width="120" fixed="left"></el-table-column>
+        <el-table-column label="Date">
+          <el-table-column
+            :prop="'date' + n"
+            :label="formatTooltip(n)"
+            :key="'date' + n"
+            v-for="n in allFoldersDuration()"
+            :width="100"
+          ></el-table-column>
+        </el-table-column>
+      </el-table>
+    </div>
   </div>
 </template>
 <script>
@@ -109,7 +107,9 @@ export default {
         .add(value, "days");
     },
     formatTooltip(value) {
-      return this.getDateByIndex(value).format("DD.MM.");
+      return this.getDateByIndex(value).format(
+        `${process.env.VUE_APP_DATE_FORMAT}`
+      );
     },
     getFirstDate: function() {
       const minDate = moment.min(this.getFolders.map(d => moment(d.startDate)));
@@ -194,7 +194,6 @@ export default {
   margin: 14px;
   display: block;
   max-width: 753px;
-  z-index: -1;
 }
 .subproject-list {
   margin: 20px 4px;

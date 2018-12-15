@@ -88,6 +88,7 @@ export default {
     updateFolder(e) {
       const name = this.folderName;
       if (name === "") {
+        this.$message.error("Name cannot be empty.");
         this.cancel(e);
         return;
       }
@@ -100,6 +101,10 @@ export default {
         startDate === this.folder.startDate &&
         endDate === this.folder.endDate
       ) {
+        this.$message({
+          message: "There are no new chages.",
+          type: "warning"
+        });
         this.cancel(e);
         return;
       }
@@ -112,9 +117,14 @@ export default {
           }
         })
         .then(() => {
+          this.$message({
+            message: "Your changes have been saved.",
+            type: "success"
+          });
           this.cancel(e);
         })
         .catch(error => {
+          this.$message.error("Error while saving.");
           console.log(error);
         });
     },
