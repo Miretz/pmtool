@@ -59,49 +59,8 @@
               </el-col>
             </el-row>
           </div>
-
-          <!-- List of project teams -->
-          <div class="header-title" v-if="isFolder">
-            <h3>Shared with</h3>
-          </div>
-          <div class="subproject-list" v-if="isFolder">
-            <div
-              v-for="f in getFolderTeams"
-              :key="f.id"
-              :model="folder"
-              :class="'subproject-elem'"
-              @click.left.stop="$router.push({name: 'folder', params: {id: f.id}})"
-            >
-              <i class="fas fa-users"></i>
-              &nbsp;{{f.name}}
-            </div>
-          </div>
-
-          <!-- List of subprojects -->
-          <div class="header-title" v-if="isFolder">
-            <h3>List of subprojects</h3>
-          </div>
-          <div class="subproject-list" v-if="isFolder">
-            <div
-              v-for="f in getFolders"
-              :key="f.id"
-              :model="folder"
-              :class="'subproject-elem'"
-              @click.left.stop="$router.push({name: 'folder', params: {id: f.id}})"
-            >
-              <el-row>
-                <el-col :span="12">
-                  <div>
-                    <i class="far fa-folder-open"></i>
-                    &nbsp;{{f.name}}
-                  </div>
-                </el-col>
-                <el-col :span="12">
-                  <div class="float-right">{{f.startDate | formatDate}} - {{f.endDate | formatDate}}</div>
-                </el-col>
-              </el-row>
-            </div>
-          </div>
+          <FolderTeams :key="'teams_' + folder.id" :model="folder"></FolderTeams>
+          <FolderGantt :key="'gantt_' + folder.id" :model="folder"></FolderGantt>
         </div>
       </div>
     </el-col>
@@ -112,23 +71,19 @@
 </template>
 <script>
 import { mapState } from "vuex";
-import {
-  GetFolder,
-  GetUserById,
-  GetFolders,
-  GetFolderTeams
-} from "../constants/query.gql";
+import { GetFolder, GetUserById } from "../constants/query.gql";
 import FolderDetail from "./FolderDetail.vue";
 import { VueEditor } from "vue2-editor";
+import FolderGantt from "@/components/FolderGantt";
+import FolderTeams from "@/components/FolderTeams";
 export default {
   components: {
     FolderDetail,
-    VueEditor
+    VueEditor,
+    FolderGantt,
+    FolderTeams
   },
   computed: {
-    isFolder: function() {
-      return this.getFolders.length > 0;
-    },
     hasParent: function() {
       return this.folder.parent !== null;
     },
@@ -149,7 +104,6 @@ export default {
       startDate: "",
       endDate: "",
       createdBy: "",
-      getFolders: [],
       showEditor: localStorage.getItem("show-editor") === "true",
       editorSettings: {
         modules: { toolbar: false }
@@ -186,30 +140,6 @@ export default {
       result({ data: { getUserById } }) {
         const user = getUserById;
         this.createdBy = `${user.name} (${user.jobTitle})`;
-      }
-    },
-    getFolders: {
-      query: GetFolders,
-      skip() {
-        return this.folder.id == null || this.folder.id === "";
-      },
-      variables() {
-        return { parent: this.folder.id };
-      },
-      error(error) {
-        console.error(error);
-      }
-    },
-    getFolderTeams: {
-      query: GetFolderTeams,
-      skip() {
-        return this.folder.id == null || this.folder.id === "";
-      },
-      variables() {
-        return { id: this.folder.id };
-      },
-      error(error) {
-        console.error(error);
       }
     }
   },
@@ -260,20 +190,5 @@ export default {
 }
 .float-right {
   float: right;
-}
-
-.subproject-list {
-  margin: 20px 4px;
-}
-
-.subproject-elem {
-  margin: 10px;
-  text-align: justify;
-  padding: 10px;
-  border: 1px solid #eee;
-  background-color: #e8e8e8;
-  border: 2px solid #ccc;
-  border-radius: 4px;
-  cursor: pointer;
 }
 </style>

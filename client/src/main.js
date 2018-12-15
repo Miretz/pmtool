@@ -8,6 +8,7 @@ import { enableExperimentalFragmentVariables } from 'graphql-tag'
 import VueApollo from 'vue-apollo'
 import ElementUI from 'element-ui'
 import moment from 'moment'
+import YanProgress from 'yan-progress';
 
 import App from './App.vue'
 import router from './router'
@@ -18,6 +19,7 @@ import './assets/css/style.scss'
 import PlusButton from '@/components/icons/PlusButton.vue'
 
 Vue.use(ElementUI)
+Vue.use(YanProgress);
 
 Vue.config.productionTip = false
 

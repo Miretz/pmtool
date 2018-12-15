@@ -1,7 +1,7 @@
 body {
   color: #eff2f4;
   margin: 0;
-  background-color: #4A4090;
+  background-color: #0056b3;
   -webkit-font-smoothing: antialiased;
   font-family: "Open sans","lucida grande","Segoe UI",arial,verdana,tahoma,"Hiragino Kaku Gothic ProN",
               "Osaka","Meiryo UI","Yu Gothic UI",sans-serif;
@@ -523,5 +523,13 @@ ul.tree {
   float: left;
   padding: 4px;
   cursor: pointer;
+}
+
+.project-running {
+  background: #66b1ff  !important;;
+}
+
+.project-running:hover {
+  background: #85c0ff !important;
 }
 
