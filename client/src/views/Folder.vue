@@ -31,6 +31,7 @@
                   :editorToolbar="[]"
                   :disabled="true"
                   :editorOptions="editorSettings"
+                  class="folder-description"
                 ></vue-editor>
               </el-col>
             </el-row>
@@ -170,7 +171,7 @@ export default {
   margin: 2px 0;
   width: 100%;
   background-color: #f8f8f8;
-  border: 2px solid #ccc;
+  border: 1px solid #eee;
   border-radius: 4px;
   padding: 4px;
   overflow: auto;
@@ -189,5 +190,8 @@ export default {
 }
 .float-right {
   float: right;
+}
+.ql-container.ql-snow {
+  border: none !important;
 }
 </style>

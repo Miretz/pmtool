@@ -12,27 +12,33 @@
         :class="'subproject-elem'"
         @click.left.stop="$router.push({name: 'folder', params: {id: f.id}})"
       >
-        <el-row>
-          <el-col :span="12">
-            <div>
-              <i class="far fa-folder-open"></i>
-              &nbsp;{{f.name}}
-            </div>
-          </el-col>
-          <el-col :span="12">
-            <div class="float-right">{{f.startDate | formatDate}} - {{f.endDate | formatDate}}</div>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col>
-            <div class="gantt-progress-bar">
-              <yan-progress
-                :total="allFoldersDuration()"
-                :done="doneAmount(f)"
-                :modify="modifyAmount(f)"
-                :tip="ganttConfig(f)"
-              />
-            </div>
+        <el-row :gutter="12">
+          <el-col :span="24">
+            <el-card shadow="always">
+              <el-row>
+                <el-col :span="12">
+                  <div>
+                    <i class="far fa-folder-open"></i>
+                    &nbsp;{{f.name}}
+                  </div>
+                </el-col>
+                <el-col :span="12">
+                  <div class="float-right">{{f.startDate | formatDate}} - {{f.endDate | formatDate}}</div>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col>
+                  <div class="gantt-progress-bar">
+                    <yan-progress
+                      :total="allFoldersDuration()"
+                      :done="doneAmount(f)"
+                      :modify="modifyAmount(f)"
+                      :tip="ganttConfig(f)"
+                    />
+                  </div>
+                </el-col>
+              </el-row>
+            </el-card>
           </el-col>
         </el-row>
       </div>
@@ -42,18 +48,7 @@
       <h3>Detailed plan</h3>
     </div>
     <div class="gantt-chart">
-      <el-table :data="getRanges()" border style="width: 100%" :cell-class-name="cellClassName">
-        <el-table-column prop="name" label="Name" width="120" fixed="left"></el-table-column>
-        <el-table-column label="Date">
-          <el-table-column
-            :prop="'date' + i"
-            :label="formatTooltip(i)"
-            :key="'date' + i"
-            v-for="(n, i) in allFoldersDuration()"
-            :width="100"
-          ></el-table-column>
-        </el-table-column>
-      </el-table>
+      <!-- TODO: new gant chart -->
     </div>
   </div>
 </template>
@@ -65,6 +60,33 @@ export default {
   computed: {
     isFolder: function() {
       return this.getFolders.length > 0;
+    },
+    getRanges: function() {
+      let result = [];
+      const currentDay = new Date();
+      for (let f of this.getFolders) {
+        let row = {
+          name: f.name
+        };
+        const from = this.modifyAmount(f);
+        const to = this.doneAmount(f);
+        const today = this.duration(this.getFirstDate(), currentDay);
+        for (let n = 0; n <= this.allFoldersDuration(); n++) {
+          if (n < from || n > to) {
+            row["date" + n] = "";
+            row["style" + n] = "";
+          } else if (n === today) {
+            row["date" + n] = this.formatTooltip(n);
+            row["style" + n] = "gttable-current-day";
+          } else {
+            row["date" + n] = this.formatTooltip(n);
+            row["style" + n] = "gttable-running";
+          }
+        }
+        result.push(row);
+      }
+      this.ranges = result;
+      return result;
     }
   },
   data() {
@@ -114,33 +136,6 @@ export default {
     allFoldersDuration: function() {
       return this.duration(this.getFirstDate(), this.getLastDate()) + 1;
     },
-    getRanges: function() {
-      let result = [];
-      const currentDay = new Date();
-      for (let f of this.getFolders) {
-        let row = {
-          name: f.name
-        };
-        const from = this.modifyAmount(f);
-        const to = this.doneAmount(f);
-        const today = this.duration(this.getFirstDate(), currentDay);
-        for (let n = 0; n <= this.allFoldersDuration(); n++) {
-          if (n < from || n > to) {
-            row["date" + n] = "";
-            row["style" + n] = "";
-          } else if (n === today) {
-            row["date" + n] = this.formatTooltip(n);
-            row["style" + n] = "gttable-current-day";
-          } else {
-            row["date" + n] = this.formatTooltip(n);
-            row["style" + n] = "gttable-running";
-          }
-        }
-        result.push(row);
-      }
-      this.ranges = result;
-      return result;
-    },
     cellClassName({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 0) return "";
       let tableRow = this.ranges[rowIndex];
@@ -187,12 +182,6 @@ export default {
 }
 .subproject-elem {
   margin: 10px;
-  text-align: justify;
-  padding: 10px;
-  border: 1px solid #eee;
-  background-color: #e8e8e8;
-  border: 2px solid #ccc;
-  border-radius: 4px;
   cursor: pointer;
 }
 </style>

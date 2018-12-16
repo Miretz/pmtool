@@ -24,7 +24,7 @@
       </div>
       <h3>Project details</h3>
       <div class="header-title">Project description:</div>
-      <vue-editor v-model="folderDescription"></vue-editor>
+      <vue-editor v-model="folderDescription" class="folder-description"></vue-editor>
       <el-row>
         <el-col :span="6">
           <div class="header-title">Start date:</div>
@@ -213,5 +213,14 @@ export default {
 }
 .float-right {
   float: right;
+}
+.folder-description {
+  margin: 2px 0;
+  width: 100%;
+  background-color: #f8f8f8;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  padding: 4px;
+  overflow: auto;
 }
 </style>

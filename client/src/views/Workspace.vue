@@ -69,6 +69,9 @@ export default {
     },
     getFolders: {
       query: GetFolders,
+      variables() {
+        return { parent: "" };
+      },
       error(error) {
         console.error(error);
       }

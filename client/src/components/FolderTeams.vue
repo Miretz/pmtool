@@ -11,8 +11,14 @@
         :class="'teams-elem'"
         @click.left.stop="$router.push({name: 'folder', params: {id: f.id}})"
       >
-        <i class="fas fa-users"></i>
-        &nbsp;{{f.name}}
+        <el-row :gutter="12">
+          <el-col :span="8">
+            <el-card shadow="always">
+              <i class="fas fa-users"></i>
+              &nbsp;{{f.name}}
+            </el-card>
+          </el-col>
+        </el-row>
       </div>
     </div>
   </div>
@@ -53,12 +59,6 @@ export default {
 }
 .teams-elem {
   margin: 10px;
-  text-align: justify;
-  padding: 10px;
-  border: 1px solid #eee;
-  background-color: #e8e8e8;
-  border: 2px solid #ccc;
-  border-radius: 4px;
   cursor: pointer;
 }
 </style>
