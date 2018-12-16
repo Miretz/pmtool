@@ -14,31 +14,29 @@
       >
         <el-row :gutter="12">
           <el-col :span="24">
-            <el-card shadow="always">
-              <el-row>
-                <el-col :span="12">
-                  <div>
-                    <i class="far fa-folder-open"></i>
-                    &nbsp;{{f.name}}
-                  </div>
-                </el-col>
-                <el-col :span="12">
-                  <div class="float-right">{{f.startDate | formatDate}} - {{f.endDate | formatDate}}</div>
-                </el-col>
-              </el-row>
-              <el-row>
-                <el-col>
-                  <div class="gantt-progress-bar">
-                    <yan-progress
-                      :total="allFoldersDuration()"
-                      :done="doneAmount(f)"
-                      :modify="modifyAmount(f)"
-                      :tip="ganttConfig(f)"
-                    />
-                  </div>
-                </el-col>
-              </el-row>
-            </el-card>
+            <el-row>
+              <el-col :span="12">
+                <div>
+                  <i class="far fa-folder-open"></i>
+                  &nbsp;{{f.name}}
+                </div>
+              </el-col>
+              <el-col :span="12">
+                <div class="float-right">{{f.startDate | formatDate}} - {{f.endDate | formatDate}}</div>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col>
+                <div class="gantt-progress-bar">
+                  <yan-progress
+                    :total="allFoldersDuration()"
+                    :done="doneAmount(f)"
+                    :modify="modifyAmount(f)"
+                    :tip="ganttConfig(f)"
+                  />
+                </div>
+              </el-col>
+            </el-row>
           </el-col>
         </el-row>
       </div>
@@ -48,45 +46,60 @@
       <h3>Detailed plan</h3>
     </div>
     <div class="gantt-chart">
-      <!-- TODO: new gant chart -->
+      <gantt-chart :data="getData" :firstDate="getFirstDate" :today="getTodaysIndex"></gantt-chart>
     </div>
   </div>
 </template>
 <script>
 import { GetFolders } from "../constants/query.gql";
 import moment from "moment";
+import GanttChart from "./GanttChart.vue";
 export default {
   props: ["model"],
+  components: {
+    GanttChart
+  },
   computed: {
     isFolder: function() {
       return this.getFolders.length > 0;
     },
-    getRanges: function() {
-      let result = [];
-      const currentDay = new Date();
-      for (let f of this.getFolders) {
-        let row = {
-          name: f.name
-        };
-        const from = this.modifyAmount(f);
-        const to = this.doneAmount(f);
-        const today = this.duration(this.getFirstDate(), currentDay);
-        for (let n = 0; n <= this.allFoldersDuration(); n++) {
-          if (n < from || n > to) {
-            row["date" + n] = "";
-            row["style" + n] = "";
-          } else if (n === today) {
-            row["date" + n] = this.formatTooltip(n);
-            row["style" + n] = "gttable-current-day";
-          } else {
-            row["date" + n] = this.formatTooltip(n);
-            row["style" + n] = "gttable-running";
+    getData: function() {
+      return {
+        datasets: [
+          {
+            //before
+            data: this.getFolders.map(f => this.modifyAmount(f)),
+            backgroundColor: "#ffcc00",
+            hoverBackgroundColor: "#ffcc00"
+          },
+          {
+            //progress
+            data: this.getFolders.map(
+              f => this.doneAmount(f) - this.modifyAmount(f)
+            ),
+            backgroundColor: "#007acc",
+            hoverBackgroundColor: "#007acc"
+          },
+          {
+            //finished
+            data: this.getFolders.map(
+              f => this.allFoldersDuration() - this.doneAmount(f)
+            ),
+            backgroundColor: "#ccc",
+            hoverBackgroundColor: "#eee"
           }
-        }
-        result.push(row);
-      }
-      this.ranges = result;
-      return result;
+        ],
+        labels: this.getFolders.map(f => f.name)
+      };
+    },
+    getFirstDate: function() {
+      return moment.min(this.getFolders.map(d => moment(d.startDate)));
+    },
+    getLastDate: function() {
+      return moment.max(this.getFolders.map(d => moment(d.endDate)));
+    },
+    getTodaysIndex: function() {
+      return this.duration(this.getFirstDate, new Date());
     }
   },
   data() {
@@ -113,28 +126,22 @@ export default {
       return Math.abs(endDateDay.diff(startDateDay, "days"));
     },
     doneAmount(f) {
-      return this.duration(this.getFirstDate(), f.endDate);
+      return this.duration(this.getFirstDate, f.endDate);
     },
     modifyAmount(f) {
-      return this.duration(this.getFirstDate(), f.startDate);
+      return this.duration(this.getFirstDate, f.startDate);
     },
     getDateByIndex(value) {
       if (value === 0) return this.getFirstDate();
-      return moment(this.getFirstDate()).add(value, "days");
+      return moment(this.getFirstDate).add(value, "days");
     },
     formatTooltip(value) {
       return this.getDateByIndex(value).format(
         `${process.env.VUE_APP_DATE_FORMAT}`
       );
     },
-    getFirstDate: function() {
-      return moment.min(this.getFolders.map(d => moment(d.startDate)));
-    },
-    getLastDate: function() {
-      return moment.max(this.getFolders.map(d => moment(d.endDate)));
-    },
     allFoldersDuration: function() {
-      return this.duration(this.getFirstDate(), this.getLastDate()) + 1;
+      return this.duration(this.getFirstDate, this.getLastDate) + 1;
     },
     cellClassName({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 0) return "";
@@ -181,7 +188,18 @@ export default {
   margin: 20px 4px;
 }
 .subproject-elem {
-  margin: 10px;
+  margin: 16px 10px;
   cursor: pointer;
+  text-align: justify;
+  padding: 10px;
+  border: 1px solid #eee;
+  background-color: #fff;
+  border-radius: 4px;
+  -webkit-box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+}
+.subproject-card {
+  overflow: visible;
+  z-index: -1;
 }
 </style>
