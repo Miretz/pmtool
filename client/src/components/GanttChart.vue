@@ -27,63 +27,67 @@ export default {
   extends: HorizontalBar,
   props: ["data", "firstDate", "today"],
   mounted() {
-    const dateToStart = this.firstDate.clone();
-    const todayIndex = this.today;
-    this.renderChart(this.data, {
-      lineAtIndex: todayIndex,
-      title: {
-        display: true,
-        text: "Detailed view"
-      },
-      scales: {
-        xAxes: [
-          {
-            ticks: {
-              beginAtZero: true,
-              fontFamily: "'Open Sans Bold', sans-serif",
-              fontSize: 11,
-              stepSize: 30,
-              min: 0,
-              callback: function(value, index, labels) {
-                if (value % 30 !== 0) return "";
-                return dateToStart
-                  .clone()
-                  .add(value, "days")
-                  .format(`${process.env.VUE_APP_DATE_FORMAT}`);
-              }
-            },
-            scaleLabel: {
-              display: true,
-              labelString: "Date"
-            },
-            gridLines: {},
-            stacked: true
-          }
-        ],
-        yAxes: [
-          {
-            gridLines: {
-              display: false,
-              color: "#fff",
-              zeroLineColor: "#fff",
-              zeroLineWidth: 0
-            },
-            ticks: {
-              fontFamily: "'Open Sans Bold', sans-serif",
-              fontSize: 11
-            },
-            stacked: true
-          }
-        ]
-      },
-      legend: {
-        display: false
-      },
-      responsive: true,
-      maintainAspectRatio: false,
-      pointLabelFontFamily: "'Open Sans Bold', sans-serif",
-      scaleFontFamily: "'Open Sans Bold', sans-serif"
-    });
+    this.generateChart();
+  },
+  methods: {
+    generateChart() {
+      const dateToStart = this.firstDate.clone();
+      const todayIndex = this.today;
+      const options = {
+        lineAtIndex: todayIndex,
+        title: {
+          display: true,
+          text: "Detailed view"
+        },
+        scales: {
+          xAxes: [
+            {
+              ticks: {
+                beginAtZero: true,
+                fontFamily: "'Open Sans Bold', sans-serif",
+                fontSize: 11,
+                min: 0,
+                callback: function(value, index, labels) {
+                  return dateToStart
+                    .clone()
+                    .add(value, "days")
+                    .format(`${process.env.VUE_APP_DATE_FORMAT}`);
+                }
+              },
+              scaleLabel: {
+                display: true,
+                labelString: "Date"
+              },
+              gridLines: {},
+              stacked: true
+            }
+          ],
+          yAxes: [
+            {
+              gridLines: {
+                display: false,
+                color: "#fff",
+                zeroLineColor: "#fff",
+                zeroLineWidth: 0
+              },
+              ticks: {
+                fontFamily: "'Open Sans Bold', sans-serif",
+                fontSize: 11
+              },
+              stacked: true
+            }
+          ]
+        },
+        legend: {
+          display: false
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+        pointLabelFontFamily: "'Open Sans Bold', sans-serif",
+        scaleFontFamily: "'Open Sans Bold', sans-serif",
+      };
+      this.renderChart(this.data, options);
+    }
   }
 };
 </script>

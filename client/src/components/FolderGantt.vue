@@ -46,7 +46,12 @@
       <h3>Detailed plan</h3>
     </div>
     <div class="gantt-chart">
-      <gantt-chart :data="getData" :firstDate="getFirstDate" :today="getTodaysIndex"></gantt-chart>
+      <gantt-chart
+        :data="getData"
+        :firstDate="getFirstDate"
+        :today="getTodaysIndex"
+        :styles="{position: 'relative'}"
+      ></gantt-chart>
     </div>
   </div>
 </template>
@@ -182,7 +187,6 @@ export default {
 .gantt-chart {
   margin: 14px;
   display: block;
-  max-width: 753px;
 }
 .subproject-list {
   margin: 20px 4px;
