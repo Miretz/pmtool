@@ -1,10 +1,37 @@
 <template>
-  <div v-if="isFolder">
-    <div class="header-title">
-      <h3>List of subprojects</h3>
-    </div>
-
+  <div>
     <div class="subproject-list">
+      <div class="subproject-elem parent">
+        <el-row :gutter="12">
+          <el-col :span="24">
+            <el-row>
+              <el-col :span="12">
+                <div>
+                  <i class="far fa-folder-open"></i>
+                  &nbsp;{{model.name}}
+                </div>
+              </el-col>
+              <el-col :span="12">
+                <div
+                  class="float-right"
+                >{{model.startDate | formatDate}} - {{model.endDate | formatDate}}</div>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col>
+                <div class="gantt-progress-bar">
+                  <yan-progress
+                    :total="duration(model.startDate, model.endDate)"
+                    :done="duration(model.startDate, model.endDate)"
+                    :modify="duration(model.startDate, getCurrentDay)"
+                    :tip="progressBarConfig(model)"
+                  />
+                </div>
+              </el-col>
+            </el-row>
+          </el-col>
+        </el-row>
+      </div>
       <div
         v-for="f in getFolders"
         :key="f.id"
@@ -17,8 +44,8 @@
             <el-row>
               <el-col :span="12">
                 <div>
-                  <i class="far fa-folder-open"></i>
-                  &nbsp;{{f.name}}
+                  <i class="far fa-folder"></i>
+                  &nbsp;{{model.name}} / {{f.name}}
                 </div>
               </el-col>
               <el-col :span="12">
@@ -41,17 +68,15 @@
         </el-row>
       </div>
     </div>
-
-    <div class="header-title">
-      <h3>Detailed plan</h3>
-    </div>
-    <div class="gantt-chart">
-      <gantt-chart
-        :data="getData"
-        :firstDate="getFirstDate"
-        :today="getTodaysIndex"
-        :styles="{position: 'relative'}"
-      ></gantt-chart>
+    <div v-if="isFolder">
+      <div class="gantt-chart">
+        <gantt-chart
+          :data="getData"
+          :firstDate="getFirstDate"
+          :today="getTodaysIndex"
+          :styles="{position: 'relative'}"
+        ></gantt-chart>
+      </div>
     </div>
   </div>
 </template>
@@ -171,7 +196,7 @@ export default {
   margin: 20px 4px;
 }
 .subproject-elem {
-  margin: 16px 10px;
+  margin: 8px 20px 8px 30px;
   cursor: pointer;
   text-align: justify;
   padding: 10px;
@@ -180,6 +205,11 @@ export default {
   border-radius: 4px;
   -webkit-box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+}
+.parent {
+  margin: 8px 20px 8px 20px;
+  border: 2px solid #ccc;
+  font-weight: bold;
 }
 .subproject-card {
   overflow: visible;

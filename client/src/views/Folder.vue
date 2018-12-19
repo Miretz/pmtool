@@ -17,51 +17,58 @@
               <el-button @click="toggleEditor" icon="el-icon-edit"></el-button>
             </div>
           </div>
-          <div class="header-title" v-if="!isTeam(folder) && subRoute==='folder'">
-            <h3>Project details</h3>
-            <el-row>
-              <el-col :span="24">
-                <div class="header-title">Project description:</div>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="24">
-                <vue-editor
-                  v-model="folderDescription"
-                  :editorToolbar="[]"
-                  :disabled="true"
-                  :editorOptions="editorSettings"
-                  class="folder-description"
-                ></vue-editor>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="6">
-                <div class="header-title">Created by:</div>
-              </el-col>
-              <el-col :span="18">
-                <div class="header-title">{{createdBy}}</div>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="6">
-                <div class="header-title">Start date:</div>
-              </el-col>
-              <el-col :span="18">
-                <div class="header-title">{{folder.startDate | formatDate}}</div>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="6">
-                <div class="header-title">End date:</div>
-              </el-col>
-              <el-col :span="18">
-                <div class="header-title">{{folder.endDate | formatDate}}</div>
-              </el-col>
-            </el-row>
-          </div>
-          <FolderTeams :key="'teams_' + folder.id" :model="folder"></FolderTeams>
-          <FolderGantt :key="'gantt_' + folder.id" :model="folder"></FolderGantt>
+          <el-collapse v-model="activeNames">
+            <el-collapse-item title="Project Details" name="details">
+              <div class="header-title" v-if="!isTeam(folder) && subRoute==='folder'">
+                <el-row>
+                  <el-col :span="24">
+                    <div class="header-title">Project description:</div>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="24">
+                    <vue-editor
+                      v-model="folderDescription"
+                      :editorToolbar="[]"
+                      :disabled="true"
+                      :editorOptions="editorSettings"
+                      class="folder-description"
+                    ></vue-editor>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="6">
+                    <div class="header-title">Created by:</div>
+                  </el-col>
+                  <el-col :span="18">
+                    <div class="header-title">{{createdBy}}</div>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="6">
+                    <div class="header-title">Start date:</div>
+                  </el-col>
+                  <el-col :span="18">
+                    <div class="header-title">{{folder.startDate | formatDate}}</div>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="6">
+                    <div class="header-title">End date:</div>
+                  </el-col>
+                  <el-col :span="18">
+                    <div class="header-title">{{folder.endDate | formatDate}}</div>
+                  </el-col>
+                </el-row>
+              </div>
+            </el-collapse-item>
+            <el-collapse-item title="Project Teams" name="teams">
+              <FolderTeams :key="'teams_' + folder.id" :model="folder"></FolderTeams>
+            </el-collapse-item>
+            <el-collapse-item title="Project Progress" name="progress">
+              <FolderGantt :key="'gantt_' + folder.id" :model="folder"></FolderGantt>
+            </el-collapse-item>
+          </el-collapse>
         </div>
       </div>
     </el-col>
@@ -108,7 +115,8 @@ export default {
       showEditor: localStorage.getItem("show-editor") === "true",
       editorSettings: {
         modules: { toolbar: false }
-      }
+      },
+      activeNames: ["progress"]
     };
   },
   apollo: {
@@ -149,6 +157,12 @@ export default {
     },
     toggleEditor: function() {
       this.showEditor = !this.showEditor;
+      // unroll details if they are currently hidden
+      if (this.showEditor) {
+        if (this.activeNames.indexOf("details") === -1) {
+          this.activeNames.push("details");
+        }
+      }
       localStorage.setItem("show-editor", JSON.stringify(this.showEditor));
     }
   }

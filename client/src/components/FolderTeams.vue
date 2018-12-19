@@ -1,8 +1,5 @@
 <template>
   <div v-if="hasTeams">
-    <div class="header-title">
-      <h3>Shared with</h3>
-    </div>
     <div class="teams-list">
       <div
         v-for="f in getFolderTeams"
