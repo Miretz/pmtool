@@ -13,4 +13,6 @@ yarn global add @vue/cli
 yarn serve
 cd ..
 
-http://localhost:8080
+UI: http://localhost:8080
+
+BACKEND: http://localhost:5500/playground
