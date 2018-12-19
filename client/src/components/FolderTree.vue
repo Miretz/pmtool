@@ -98,7 +98,7 @@ export default {
           mutation: DeleteFolder,
           variables: { id },
           update: store => {
-            const variables = this.team ? {} : { parent };
+            const variables = this.team ? { parent: "" } : { parent };
             const data = store.readQuery({
               query: GetFolders,
               variables

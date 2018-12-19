@@ -46,7 +46,7 @@ export default {
           mutation: CreateFolder,
           variables: { name, parent, description },
           update: (store, { data: { createFolder } }) => {
-            const variables = parent ? { parent } : {};
+            const variables = parent ? { parent } : { parent: "" };
             try {
               const data = store.readQuery({
                 query: GetFolders,
