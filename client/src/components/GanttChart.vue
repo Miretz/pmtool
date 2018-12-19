@@ -20,7 +20,7 @@ Chart.controllers.horizontalBar.prototype.draw = function(ease) {
 
   context.textAlign = "center";
   context.fillStyle = "#ff0000";
-  context.fillText("TODAY", hScale.left + left, vScale.top - 12);
+  context.fillText("TODAY", hScale.left + left, vScale.top - 10);
 };
 
 export default {
@@ -37,7 +37,7 @@ export default {
         lineAtIndex: todayIndex,
         title: {
           display: true,
-          text: "Detailed view"
+          text: ""
         },
         scales: {
           xAxes: [
