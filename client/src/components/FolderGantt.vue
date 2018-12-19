@@ -29,10 +29,10 @@
               <el-col>
                 <div class="gantt-progress-bar">
                   <yan-progress
-                    :total="allFoldersDuration()"
-                    :done="doneAmount(f)"
-                    :modify="modifyAmount(f)"
-                    :tip="ganttConfig(f)"
+                    :total="duration(f.startDate, f.endDate)"
+                    :done="duration(f.startDate, f.endDate)"
+                    :modify="duration(f.startDate, getCurrentDay)"
+                    :tip="progressBarConfig(f)"
                   />
                 </div>
               </el-col>
@@ -73,14 +73,16 @@ export default {
         datasets: [
           {
             //before
-            data: this.getFolders.map(f => this.modifyAmount(f)),
+            data: this.getFolders.map(f =>
+              this.duration(this.getFirstDate, f.startDate)
+            ),
             backgroundColor: "#ffcc00",
             hoverBackgroundColor: "#ffcc00"
           },
           {
             //progress
-            data: this.getFolders.map(
-              f => this.doneAmount(f) - this.modifyAmount(f)
+            data: this.getFolders.map(f =>
+              this.duration(f.startDate, f.endDate)
             ),
             backgroundColor: "#007acc",
             hoverBackgroundColor: "#007acc"
@@ -88,7 +90,9 @@ export default {
           {
             //finished
             data: this.getFolders.map(
-              f => this.allFoldersDuration() - this.doneAmount(f)
+              f =>
+                this.duration(this.getFirstDate, this.getLastDate) -
+                this.duration(this.getFirstDate, f.endDate)
             ),
             backgroundColor: "#ccc",
             hoverBackgroundColor: "#eee"
@@ -105,6 +109,11 @@ export default {
     },
     getTodaysIndex: function() {
       return this.duration(this.getFirstDate, new Date());
+    },
+    getCurrentDay: function() {
+      return moment(new Date())
+        .startOf("day")
+        .toDate();
     }
   },
   data() {
@@ -130,50 +139,20 @@ export default {
       const endDateDay = moment(endDate);
       return Math.abs(endDateDay.diff(startDateDay, "days"));
     },
-    doneAmount(f) {
-      return this.duration(this.getFirstDate, f.endDate);
-    },
-    modifyAmount(f) {
-      return this.duration(this.getFirstDate, f.startDate);
-    },
-    getDateByIndex(value) {
-      if (value === 0) return this.getFirstDate();
-      return moment(this.getFirstDate).add(value, "days");
-    },
-    formatTooltip(value) {
-      return this.getDateByIndex(value).format(
-        `${process.env.VUE_APP_DATE_FORMAT}`
-      );
-    },
-    allFoldersDuration: function() {
-      return this.duration(this.getFirstDate, this.getLastDate) + 1;
-    },
-    cellClassName({ row, column, rowIndex, columnIndex }) {
-      if (columnIndex === 0) return "";
-      let tableRow = this.ranges[rowIndex];
-      return tableRow["style" + (columnIndex - 1)];
-    },
-    days(val) {
-      return val === 1 ? `${val} day` : `${val} days`;
-    },
-    ganttConfig(f) {
-      const modAmount = this.modifyAmount(f);
-      const doneAmount = this.doneAmount(f);
-      const modifyStr = this.days(modAmount);
-      const durationStr = this.days(doneAmount - modAmount);
-      const finishedStr = this.days(this.allFoldersDuration() - doneAmount);
+    progressBarConfig(f) {
+      const remaining = this.duration(this.getCurrentDay, f.endDate);
       return [
         {
-          text: `Project finished: ${finishedStr}`,
-          fillStyle: "#ccc"
+          text: `Project done`,
+          fillStyle: "#92CD00"
         },
         {
-          text: `Project duration: ${durationStr}`,
-          fillStyle: "#007acc"
+          text: `Days remaining: ${remaining}`,
+          fillStyle: "#ffda6b"
         },
         {
-          text: `Before start: ${modifyStr}`,
-          fillStyle: "#ffcc00"
+          text: `Days spent: X`,
+          fillStyle: "#92CD00"
         }
       ];
     }
