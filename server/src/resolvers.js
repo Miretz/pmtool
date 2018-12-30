@@ -74,7 +74,7 @@ const resolvers = {
       const teams = folder.shareWith.filter(x => x.kind === "Team");
       return await teams.map(x => Team.findById(x.item));
     },
-    getStatuses(_, {}, context) {
+    getStatuses(_, { }, context) {
       const userId = getUserId(context);
       return projectStatuses;
     }
@@ -138,6 +138,12 @@ const resolvers = {
     },
     async createFolder(_, { parent, name, description }, context) {
       const userId = getUserId(context);
+
+      //Validate name
+      if (name === "") {
+        throw new Error("Name cannot be empty.");
+      }
+
       const folder = await Folder.create({
         name,
         parent: parent || undefined,
@@ -151,7 +157,7 @@ const resolvers = {
             }
           ],
         startDate: moment().startOf("day").toDate(),
-        endDate: moment().startOf("day").toDate(),
+        endDate: moment().startOf("day").add(1, 'week').toDate(),
         status: projectStatuses[0],
         createdBy: userId
       });
@@ -159,6 +165,19 @@ const resolvers = {
     },
     async updateFolder(_, { id, input }, context) {
       const userId = getUserId(context);
+
+      //Validate name
+      if (input.name === "") {
+        throw new Error("Name cannot be empty.");
+      }
+
+      //validate dates
+      const startDate = moment(input.startDate).startOf("day");
+      const endDate = moment(input.endDate).startOf("day");
+      if (!startDate.isBefore(endDate)) {
+        throw new Error("Date validation failed.");
+      }
+
       return await Folder.findOneAndUpdate(
         { _id: id },
         { $set: input },

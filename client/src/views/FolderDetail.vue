@@ -85,45 +85,55 @@ export default {
     document.title = `${this.folder.name} - pmtool`;
   },
   methods: {
-    updateFolder(e) {
-      const name = this.folderName;
-      if (name === "") {
+    validateSettings() {
+      if (this.folderName === "") {
         this.$message.error("Name cannot be empty.");
-        this.cancel(e);
-        return;
+        return false;
       }
-      const description = this.folderDescription;
-      const startDate = this.folderStartDate;
-      const endDate = this.folderEndDate;
+
+      //Validate that something has changed
       if (
-        name === this.folder.name &&
-        description === this.folder.description &&
-        startDate === this.folder.startDate &&
-        endDate === this.folder.endDate
+        this.folderName === this.folder.name &&
+        this.folderDescription === this.folder.description &&
+        this.folderStartDate === this.folder.startDate &&
+        this.folderEndDate === this.folder.endDate
       ) {
         this.$message({
           message: "There are no new chages.",
           type: "warning"
         });
+        return false;
+      }
+
+      //Validate date settings
+      const startDate = moment(this.folderStartDate).startOf("day");
+      const endDate = moment(this.folderEndDate).startOf("day");
+      if (!startDate.isBefore(endDate)) {
+        this.$message.error("Start date must be before end date.");
+        return false;
+      }
+      
+      return true;
+    },
+    updateFolder(e) {
+      if (!this.validateSettings()) {
         this.cancel(e);
         return;
       }
-      const correctedStartDate = moment(startDate)
-        .startOf("day")
-        .toDate();
-      const correctedEndDate = moment(endDate)
-        .startOf("day")
-        .toDate();
       this.$apollo
         .mutate({
           mutation: UpdateFolder,
           variables: {
             id: this.folder.id,
             input: {
-              name,
-              description,
-              startDate: correctedStartDate,
-              endDate: correctedEndDate
+              name: this.folderName,
+              description: this.folderDescription,
+              startDate: moment(this.folderStartDate)
+                .startOf("day")
+                .toDate(),
+              endDate: moment(this.folderEndDate)
+                .startOf("day")
+                .toDate()
             }
           }
         })
