@@ -16,7 +16,10 @@
             <div class="float-right" v-if="!isTeam(folder) && subRoute==='folder'">
               <!-- Project status dropdown -->
               <el-dropdown @command="handleStatusChange">
-                <el-button type="plain" v-bind:style="{ backgroundColor: status.color }">
+                <el-button
+                  type="plain"
+                  v-bind:style="{ backgroundColor: status.color, marginRight: '4px', border: 'none' }"
+                >
                   {{status.name}}
                   <i class="el-icon-arrow-down el-icon--right"/>
                 </el-button>

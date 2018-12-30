@@ -10,10 +10,10 @@ const projectStatuses = [
     { id: "ready", name: "Ready", color: "#fffae6" },
     { id: "approved", name: "Approved", color: "#fffae6" },
 
-    { id: "active", name: "Active", color: "#d7f3bf" },
-    { id: "inDevelopment", name: "In Development", color: "#d7f3bf" },
-    { id: "inProgress", name: "In Progress", color: "#d7f3bf" },
-    { id: "inTesting", name: "In Testing", color: "#d7f3bf" },
+    { id: "active", name: "Active", color: "#B0E57C" },
+    { id: "inDevelopment", name: "In Development", color: "#B0E57C" },
+    { id: "inProgress", name: "In Progress", color: "#B0E57C" },
+    { id: "inTesting", name: "In Testing", color: "#B0E57C" },
 
     { id: "late", name: "Late", color: "#ffcccc" },
     { id: "blocked", name: "Blocked", color: "#ffcccc" },

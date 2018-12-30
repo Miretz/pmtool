@@ -13,7 +13,7 @@
                   <el-button
                     v-if="model.status != null"
                     type="plain"
-                    v-bind:style="{ backgroundColor: model.status.color, color: '#555'}"
+                    v-bind:style="{ backgroundColor: model.status.color, color: '#555', border: 'none'}"
                     size="mini"
                     disabled
                   >{{model.status.name}}</el-button>
@@ -57,7 +57,7 @@
                   &nbsp;
                   <el-button
                     type="plain"
-                    v-bind:style="{ backgroundColor: f.status.color, color: '#555'}"
+                    v-bind:style="{ backgroundColor: f.status.color, color: '#555', border: 'none'}"
                     size="mini"
                     disabled
                   >{{f.status.name}}</el-button>
