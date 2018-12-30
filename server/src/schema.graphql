@@ -9,6 +9,7 @@ type Folder {
   startDate: Date
   endDate: Date
   createdBy: String
+  status: Status
   shareWith: [JSON]
 }
 
@@ -18,6 +19,13 @@ type Query {
   getFolder(id: String!): Folder
   getUserById(id: String!): User
   getFolderTeams(id: String!): [Team]
+  getStatuses: [Status]
+}
+
+type Status {
+  id: String
+  name: String
+  color: String
 }
 
 type Team {
@@ -60,9 +68,16 @@ input FolderInput {
   shareWith: [ShareInput]
   startDate: Date
   endDate: Date
+  status: StatusInput
 }
 
 input ShareInput {
   kind: String
   item: String
+}
+
+input StatusInput {
+  id: String
+  name: String
+  color: String
 }

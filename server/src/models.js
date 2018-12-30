@@ -1,5 +1,4 @@
 const mongoose = require("mongoose")
-const moment = require('moment')
 const Schema = mongoose.Schema
 const ObjectId = Schema.Types.ObjectId
 
@@ -17,7 +16,8 @@ const Folder = buildModel('Folder', {
     parent: { type: ObjectId, ref: 'Folder' },
     startDate: Date,
     endDate: Date,
-    createdBy: String
+    createdBy: String,
+    status: {}
 })
 
 module.exports.Folder = Folder

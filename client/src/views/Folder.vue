@@ -14,6 +14,22 @@
             </div>
             {{folder.name}}
             <div class="float-right" v-if="!isTeam(folder) && subRoute==='folder'">
+              <!-- Project status dropdown -->
+              <el-dropdown @command="handleStatusChange">
+                <el-button type="plain" v-bind:style="{ backgroundColor: status.color }">
+                  {{status.name}}
+                  <i class="el-icon-arrow-down el-icon--right"/>
+                </el-button>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item
+                    v-for="status in getStatuses"
+                    :key="status.id"
+                    :command="status.id"
+                    :style="{ 'background-color': status.color}"
+                  >{{status.name}}</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+              <!-- Edit button -->
               <el-button @click="toggleEditor" icon="el-icon-edit"></el-button>
             </div>
           </div>
@@ -42,6 +58,14 @@
                   </el-col>
                   <el-col :span="18">
                     <div class="header-title">{{createdBy}}</div>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="6">
+                    <div class="header-title">Project status:</div>
+                  </el-col>
+                  <el-col :span="18">
+                    <div class="header-title">{{folder.status.name}}</div>
                   </el-col>
                 </el-row>
                 <el-row>
@@ -79,7 +103,12 @@
 </template>
 <script>
 import { mapState } from "vuex";
-import { GetFolder, GetUserById } from "../constants/query.gql";
+import {
+  GetFolder,
+  GetUserById,
+  GetStatuses,
+  UpdateFolder
+} from "../constants/query.gql";
 import FolderDetail from "./FolderDetail.vue";
 import { VueEditor } from "vue2-editor";
 import FolderGantt from "@/components/FolderGantt";
@@ -116,7 +145,9 @@ export default {
       editorSettings: {
         modules: { toolbar: false }
       },
-      activeNames: ["progress"]
+      activeNames: ["progress"],
+      status: {},
+      getStatuses: []
     };
   },
   apollo: {
@@ -135,6 +166,7 @@ export default {
         if (this.isTeam) {
           document.title = `${this.folder.name} - pmtool`;
         }
+        this.status = this.folder.status;
       }
     },
     getUserById: {
@@ -149,6 +181,9 @@ export default {
         const user = getUserById;
         this.createdBy = `${user.name} (${user.jobTitle})`;
       }
+    },
+    getStatuses: {
+      query: GetStatuses
     }
   },
   methods: {
@@ -164,6 +199,37 @@ export default {
         }
       }
       localStorage.setItem("show-editor", JSON.stringify(this.showEditor));
+    },
+    handleStatusChange(id) {
+      const foundStatus = this.getStatuses.filter(x => x.id === id)[0];
+      if (foundStatus == null) {
+        this.$message.error("Status not found.");
+      }
+      this.status = foundStatus;
+      this.$apollo
+        .mutate({
+          mutation: UpdateFolder,
+          variables: {
+            id: this.folder.id,
+            input: {
+              status: {
+                id: foundStatus.id,
+                name: foundStatus.name,
+                color: foundStatus.color
+              }
+            }
+          }
+        })
+        .then(() => {
+          this.$message({
+            message: "Status changed to: " + this.status.name,
+            type: "success"
+          });
+        })
+        .catch(error => {
+          this.$message.error("Error while saving.");
+          console.log(error);
+        });
     }
   }
 };

@@ -8,31 +8,11 @@ const ObjectId = mongoose.Types.ObjectId;
 const { User, Team, Folder, Group } = require("./models");
 const JWT_SECRET = process.env.JWT_SECRET;
 const { getUserId } = require("./utils");
+const { projectStatuses, avatarColors } = require("./settings");
 
 function randomChoice(arr) {
   return arr[Math.floor(arr.length * Math.random())];
 }
-
-const avatarColors = [
-  "D81B60",
-  "F06292",
-  "F48FB1",
-  "FFB74D",
-  "FF9800",
-  "F57C00",
-  "00897B",
-  "4DB6AC",
-  "80CBC4",
-  "80DEEA",
-  "4DD0E1",
-  "00ACC1",
-  "9FA8DA",
-  "7986CB",
-  "3949AB",
-  "8E24AA",
-  "BA68C8",
-  "CE93D8"
-];
 
 const nodeMailer = require("nodemailer");
 const { welcomeEmail } = require("./emails");
@@ -93,6 +73,10 @@ const resolvers = {
       const folder = await Folder.findById(id).populate("shareWith");
       const teams = folder.shareWith.filter(x => x.kind === "Team");
       return await teams.map(x => Team.findById(x.item));
+    },
+    getStatuses(_, {}, context) {
+      const userId = getUserId(context);
+      return projectStatuses;
     }
   },
   Mutation: {
@@ -161,13 +145,14 @@ const resolvers = {
         shareWith: parent
           ? []
           : [
-              {
-                kind: "Team",
-                item: (await User.findById(userId)).team
-              }
-            ],
+            {
+              kind: "Team",
+              item: (await User.findById(userId)).team
+            }
+          ],
         startDate: moment().startOf("day").toDate(),
         endDate: moment().startOf("day").toDate(),
+        status: projectStatuses[0],
         createdBy: userId
       });
       return await Folder.findById(folder.id).populate("shareWith.item");

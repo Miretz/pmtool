@@ -9,6 +9,14 @@
                 <div>
                   <i class="far fa-folder-open"></i>
                   &nbsp;{{model.name}}
+                  &nbsp;
+                  <el-button
+                    v-if="model.status != null"
+                    type="plain"
+                    v-bind:style="{ backgroundColor: model.status.color, color: '#555'}"
+                    size="mini"
+                    disabled
+                  >{{model.status.name}}</el-button>
                 </div>
               </el-col>
               <el-col :span="12">
@@ -46,6 +54,13 @@
                 <div>
                   <i class="far fa-folder"></i>
                   &nbsp;{{model.name}} / {{f.name}}
+                  &nbsp;
+                  <el-button
+                    type="plain"
+                    v-bind:style="{ backgroundColor: f.status.color, color: '#555'}"
+                    size="mini"
+                    disabled
+                  >{{f.status.name}}</el-button>
                 </div>
               </el-col>
               <el-col :span="12">

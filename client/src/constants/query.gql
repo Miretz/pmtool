@@ -32,6 +32,14 @@ query GetTeam {
   }
 }
 
+query GetStatuses {
+  getStatuses {
+    id,
+    name,
+    color
+  }
+}
+
 fragment FolderFields on Folder {
   id
   name
@@ -41,6 +49,11 @@ fragment FolderFields on Folder {
   startDate
   endDate
   createdBy
+  status {
+    id 
+    name 
+    color
+  }
 }
 
 query GetFolders($parent: String) {
