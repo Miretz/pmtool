@@ -5,7 +5,7 @@
         <el-row :gutter="12">
           <el-col :span="24">
             <el-row>
-              <el-col :span="12">
+              <el-col :span="18">
                 <div>
                   <i class="far fa-folder-open"></i>
                   &nbsp;{{model.name}}
@@ -19,7 +19,7 @@
                   >{{model.status.name}}</el-button>
                 </div>
               </el-col>
-              <el-col :span="12">
+              <el-col :span="6">
                 <div
                   class="float-right"
                 >{{model.startDate | formatDate}} - {{model.endDate | formatDate}}</div>
@@ -50,7 +50,7 @@
         <el-row :gutter="12">
           <el-col :span="24">
             <el-row>
-              <el-col :span="12">
+              <el-col :span="18">
                 <div>
                   <i class="far fa-folder"></i>
                   &nbsp;{{model.name}} / {{f.name}}
@@ -63,7 +63,7 @@
                   >{{f.status.name}}</el-button>
                 </div>
               </el-col>
-              <el-col :span="12">
+              <el-col :span="6">
                 <div class="float-right">{{f.startDate | formatDate}} - {{f.endDate | formatDate}}</div>
               </el-col>
             </el-row>
