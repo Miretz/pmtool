@@ -22,7 +22,6 @@
           </el-col>
         </el-row>
       </div>
-      <h3>Project details</h3>
       <div class="header-title">Project description:</div>
       <vue-editor v-model="folderDescription" class="folder-description"></vue-editor>
       <el-row>
@@ -112,7 +111,7 @@ export default {
         this.$message.error("Start date must be before end date.");
         return false;
       }
-      
+
       return true;
     },
     updateFolder(e) {

@@ -139,7 +139,6 @@ const resolvers = {
     async createFolder(_, { parent, name, description }, context) {
       const userId = getUserId(context);
 
-      //Validate name
       if (name === "") {
         throw new Error("Name cannot be empty.");
       }
@@ -166,16 +165,26 @@ const resolvers = {
     async updateFolder(_, { id, input }, context) {
       const userId = getUserId(context);
 
-      //Validate name
-      if (input.name === "") {
-        throw new Error("Name cannot be empty.");
+      //validate name
+      if ('name' in input) {
+        if (input.name === "") {
+          throw new Error("Name cannot be empty.");
+        }
       }
 
       //validate dates
-      const startDate = moment(input.startDate).startOf("day");
-      const endDate = moment(input.endDate).startOf("day");
-      if (!startDate.isBefore(endDate)) {
+      if ('startDate' in input && !('endDate' in input)) {
         throw new Error("Date validation failed.");
+      }
+      if (!('startDate' in input) && 'endDate' in input) {
+        throw new Error("Date validation failed.");
+      }
+      if ('startDate' in input && 'endDate' in input) {
+        const startDate = moment(input.startDate).startOf("day");
+        const endDate = moment(input.endDate).startOf("day");
+        if (!startDate.isBefore(endDate)) {
+          throw new Error("Date validation failed.");
+        }
       }
 
       return await Folder.findOneAndUpdate(
