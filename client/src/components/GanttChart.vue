@@ -21,7 +21,7 @@ Chart.controllers.horizontalBar.prototype.draw = function(ease) {
 
     context.textAlign = "center";
     context.fillStyle = color;
-    context.fillText(text, hScale.left + left, vScale.top - 10);
+    context.fillText(text, hScale.left + left, vScale.top - 12);
   }
 
   const todayDataIndex = this.chart.chart.options.lineAtIndex;
@@ -47,11 +47,13 @@ export default {
         .add(value, "days")
         .format(`${process.env.VUE_APP_DATE_FORMAT}`);
     },
-    getLines(){
-      const starts = this.data.datasets[0].data
-      const ends = this.data.datasets[1].data.map((x, i) => x+starts[i]);
+    getLines() {
+      const starts = this.data.datasets[0].data;
+      const ends = this.data.datasets[1].data.map((x, i) => x + starts[i]);
       const all = starts.concat(ends);
-      return all.map(x => {return {pos: x, text: this.indexToDate(x)}});
+      return all.map(x => {
+        return { pos: x, text: this.indexToDate(x) };
+      });
     },
     generateChart() {
       const todayIndex = this.today;
@@ -72,6 +74,7 @@ export default {
                 fontFamily: "'Open Sans Bold', sans-serif",
                 fontSize: 11,
                 min: 0,
+                stepSize: 1,
                 callback: function(value, index, labels) {
                   return indexToDate(value);
                 }
@@ -83,7 +86,7 @@ export default {
               gridLines: {
                 color: "rgba(0, 0, 0, 0.1)",
               },
-              stacked: true
+              stacked: true,
             }
           ],
           yAxes: [
@@ -92,7 +95,7 @@ export default {
                 display: false,
                 color: "#fff",
                 zeroLineColor: "#fff",
-                zeroLineWidth: 0
+                zeroLineWidth: 0,
               },
               ticks: {
                 fontFamily: "'Open Sans Bold', sans-serif",
@@ -106,6 +109,9 @@ export default {
         },
         legend: {
           display: false
+        },
+        tooltips: {
+          enabled: false
         },
         responsive: true,
         maintainAspectRatio: false,
