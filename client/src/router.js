@@ -32,12 +32,6 @@ const workspace = {
           name: 'folder',
           component: FolderDetail
         },
-        // {
-        //   path: 'task/:taskId',
-        //   name: 'task',
-        //   component: Task,
-        //   props: true
-        // }
       ]
     }
   ]
