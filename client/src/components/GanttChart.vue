@@ -19,18 +19,25 @@ Chart.controllers.horizontalBar.prototype.draw = function(ease) {
     context.lineTo(hScale.left + left, vScale.bottom);
     context.stroke();
 
-    context.textAlign = "center";
-    context.fillStyle = color;
-    context.fillText(text, hScale.left + left, vScale.top - 12);
+    if (text != "") {
+      const x = hScale.left + left;
+      const y = vScale.top - 12;
+      var width = context.measureText(text).width + 10;
+      context.fillStyle = "#ffffff";
+      context.fillRect(x - width / 2, y - 10, width, 20);
+      context.textAlign = "center";
+      context.fillStyle = color;
+      context.fillText(text, x, y);
+    }
   }
-
-  const todayDataIndex = this.chart.chart.options.lineAtIndex;
-  drawLine(this.chart, todayDataIndex, "#ff0000", "TODAY");
 
   const lines = this.chart.chart.options.extraLines;
   lines.map(({ pos, text }) => {
     drawLine(this.chart, pos, "#ffcc00", text);
   });
+
+  const todayDataIndex = this.chart.chart.options.lineAtIndex;
+  drawLine(this.chart, todayDataIndex, "#ff0000", "");
 };
 
 /* CHART */
@@ -84,9 +91,9 @@ export default {
                 labelString: "Date"
               },
               gridLines: {
-                color: "rgba(0, 0, 0, 0.1)",
+                color: "rgba(0, 0, 0, 0.1)"
               },
-              stacked: true,
+              stacked: true
             }
           ],
           yAxes: [
@@ -95,7 +102,7 @@ export default {
                 display: false,
                 color: "#fff",
                 zeroLineColor: "#fff",
-                zeroLineWidth: 0,
+                zeroLineWidth: 0
               },
               ticks: {
                 fontFamily: "'Open Sans Bold', sans-serif",
