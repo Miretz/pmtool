@@ -31,7 +31,7 @@
                   <yan-progress
                     :total="duration(model.startDate, model.endDate)"
                     :done="duration(model.startDate, model.endDate)"
-                    :modify="duration(model.startDate, getCurrentDay)"
+                    :modify="calculateDaysSpent(model)"
                     :tip="progressBarConfig(model)"
                   />
                 </div>
@@ -73,7 +73,7 @@
                   <yan-progress
                     :total="duration(f.startDate, f.endDate)"
                     :done="duration(f.startDate, f.endDate)"
-                    :modify="duration(f.startDate, getCurrentDay)"
+                    :modify="calculateDaysSpent(f)"
                     :tip="progressBarConfig(f)"
                   />
                 </div>
@@ -116,16 +116,17 @@ export default {
             data: this.getFolders.map(f =>
               this.duration(this.getFirstDate, f.startDate)
             ),
-            backgroundColor: "#ffcc00",
-            hoverBackgroundColor: "#ffcc00"
+            backgroundColor: "rgba(255, 255, 255, 0)",
+            hoverBackgroundColor: "rgba(255, 255, 255, 0)"
           },
           {
             //progress
             data: this.getFolders.map(f =>
               this.duration(f.startDate, f.endDate)
             ),
-            backgroundColor: "#007acc",
-            hoverBackgroundColor: "#007acc"
+            backgroundColor: "rgba(0, 122, 204, 0.8)",
+            hoverBackgroundColor: "rgba(0, 122, 204, 1)",
+            borderWidth: 2
           },
           {
             //finished
@@ -134,8 +135,8 @@ export default {
                 this.duration(this.getFirstDate, this.getLastDate) -
                 this.duration(this.getFirstDate, f.endDate)
             ),
-            backgroundColor: "#ccc",
-            hoverBackgroundColor: "#eee"
+            backgroundColor: "rgba(255, 255, 255, 0)",
+            hoverBackgroundColor: "rgba(255, 255, 255, 0)"
           }
         ],
         labels: this.getFolders.map(f => f.name)
@@ -177,10 +178,20 @@ export default {
     duration(startDate, endDate) {
       const startDateDay = moment(startDate);
       const endDateDay = moment(endDate);
-      return Math.abs(endDateDay.diff(startDateDay, "days"));
+      return endDateDay.diff(startDateDay, "days");
+    },
+    calculateDaysSpent(model) {
+      return Math.max(
+        this.duration(model.startDate, model.endDate) -
+          this.duration(this.getCurrentDay, model.endDate),
+        0
+      );
     },
     progressBarConfig(f) {
-      const remaining = this.duration(this.getCurrentDay, f.endDate);
+      let remaining = Math.max(
+        this.duration(f.startDate, f.endDate) - this.calculateDaysSpent(f),
+        0
+      );
       return [
         {
           text: `Project done`,
@@ -188,11 +199,11 @@ export default {
         },
         {
           text: `Days remaining: ${remaining}`,
-          fillStyle: "#ffda6b"
+          fillStyle: "#92CD00"
         },
         {
           text: `Days spent: X`,
-          fillStyle: "#92CD00"
+          fillStyle: "#ffda6b"
         }
       ];
     }
