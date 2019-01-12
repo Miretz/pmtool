@@ -2,7 +2,7 @@
 import { HorizontalBar } from "vue-chartjs";
 import moment from "moment";
 
-/* TODAY LINE */
+/* LINES EXTENSION */
 const originalDraw = Chart.controllers.horizontalBar.prototype.draw;
 Chart.controllers.horizontalBar.prototype.draw = function(ease) {
   originalDraw.call(this, ease);
@@ -66,6 +66,8 @@ export default {
       const todayIndex = this.today;
       const indexToDate = this.indexToDate;
       const lines = this.getLines();
+      const clickHandler = this.handleClick;
+      const router = this.$router;
       const options = {
         lineAtIndex: todayIndex,
         extraLines: lines,
@@ -123,7 +125,19 @@ export default {
         responsive: true,
         maintainAspectRatio: false,
         pointLabelFontFamily: "'Open Sans Bold', sans-serif",
-        scaleFontFamily: "'Open Sans Bold', sans-serif"
+        scaleFontFamily: "'Open Sans Bold', sans-serif",
+        onClick: function(evt) {
+          const activeElement = this.getElementAtEvent(evt);
+          if (activeElement[0] == null) {
+            return;
+          }
+          const data = this.data.datasets[activeElement[0]._datasetIndex];
+          if (data.ids == null) {
+            return;
+          }
+          const id = data.ids[activeElement[0]._index];
+          router.push({name: 'folder', params: {id: id}})
+        }
       };
       this.renderChart(this.data, options);
     }

@@ -1,11 +1,12 @@
 <template>
   <div>
+    <!-- PROJECT PROGRESS -->
     <div class="subproject-list">
       <div class="subproject-elem parent">
         <el-row :gutter="12">
           <el-col :span="24">
             <el-row>
-              <el-col :span="18">
+              <el-col :span="12">
                 <div>
                   <i class="far fa-folder-open"></i>
                   &nbsp;{{model.name}}
@@ -20,13 +21,6 @@
                 </div>
               </el-col>
               <el-col :span="6">
-                <div
-                  class="float-right"
-                >{{model.startDate | formatDate}} - {{model.endDate | formatDate}}</div>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col>
                 <div class="gantt-progress-bar">
                   <yan-progress
                     :total="duration(model.startDate, model.endDate)"
@@ -36,6 +30,14 @@
                   />
                 </div>
               </el-col>
+              <el-col :span="6">
+                <div
+                  class="float-right"
+                >{{model.startDate | formatDate}} - {{model.endDate | formatDate}}</div>
+              </el-col>
+            </el-row>
+            <el-row>
+              
             </el-row>
           </el-col>
         </el-row>
@@ -50,10 +52,10 @@
         <el-row :gutter="12">
           <el-col :span="24">
             <el-row>
-              <el-col :span="18">
+              <el-col :span="12">
                 <div>
                   <i class="far fa-folder"></i>
-                  &nbsp;{{model.name}} / {{f.name}}
+                  &nbsp;/ {{f.name}}
                   &nbsp;
                   <el-button
                     type="plain"
@@ -63,12 +65,7 @@
                   >{{f.status.name}}</el-button>
                 </div>
               </el-col>
-              <el-col :span="6">
-                <div class="float-right">{{f.startDate | formatDate}} - {{f.endDate | formatDate}}</div>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col>
+              <el-col :span="6"> 
                 <div class="gantt-progress-bar">
                   <yan-progress
                     :total="duration(f.startDate, f.endDate)"
@@ -78,11 +75,15 @@
                   />
                 </div>
               </el-col>
+              <el-col :span="6">
+                <div class="float-right">{{f.startDate | formatDate}} - {{f.endDate | formatDate}}</div>
+              </el-col>
             </el-row>
           </el-col>
         </el-row>
       </div>
     </div>
+    <!-- GANTT CHART -->
     <div v-if="isFolder">
       <div class="gantt-chart">
         <gantt-chart
@@ -124,6 +125,7 @@ export default {
             data: this.getFolders.map(f =>
               this.duration(f.startDate, f.endDate)
             ),
+            ids: this.getFolders.map(f => f.id),
             backgroundColor: "rgba(0, 122, 204, 0.8)",
             hoverBackgroundColor: "rgba(0, 122, 204, 1)",
             borderWidth: 2
