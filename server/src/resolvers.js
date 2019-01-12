@@ -64,6 +64,10 @@ const resolvers = {
       const userId = getUserId(context);
       return await Folder.findById(id).populate("shareWith");
     },
+    async searchFolders(_, { text }, context) {
+      const userId = getUserId(context);
+      return await Folder.find({ $text: { $search: text } }).limit(20).populate("shareWith");
+    },
     async getUserById(_, { id }, context) {
       const userId = getUserId(context);
       return await User.findById(id);
@@ -187,15 +191,18 @@ const resolvers = {
         }
       }
 
-      return await Folder.findOneAndUpdate(
+      const updatedFolder = await Folder.findOneAndUpdate(
         { _id: id },
         { $set: input },
         { new: true }
       ).populate("shareWith");
+      await Folder.syncIndexes();
+      return updatedFolder;
     },
     async deleteFolder(_, { id }, context) {
       const userId = getUserId(context);
       await Folder.deleteOne({ _id: id });
+      await Folder.syncIndexes();
       deleteSubfolders(id);
       return true;
     }

@@ -19,6 +19,7 @@ type Query {
   getFolder(id: String!): Folder
   getUserById(id: String!): User
   getFolderTeams(id: String!): [Team]
+  searchFolders(text: String!): [Folder]
   getStatuses: [Status]
 }
 

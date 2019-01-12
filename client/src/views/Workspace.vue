@@ -1,12 +1,31 @@
 <template>
   <div>
     <div class="header">
-      <div @click="reloadPage" class="pointer">
-        <h1>PMTOOL</h1>
-      </div>
-      <div @click="logout" class="logout">
-        <i class="fa fa-sign-out-alt"></i>&nbsp;Logout
-      </div>
+      <el-row type="flex">
+        <el-col :span="10">
+          <div @click="reloadPage" class="pointer">
+            <h1>PMTOOL</h1>
+          </div>
+        </el-col>
+        <el-col :span="4">
+          <el-autocomplete
+            class="search-input"
+            v-model="searchState"
+            :fetch-suggestions="querySearch"
+            prefix-icon="el-icon-search"
+            placeholder="Type something"
+            :trigger-on-focus="false"
+            @select="handleSelect"
+            size="small"
+            clearable
+          ></el-autocomplete>
+        </el-col>
+        <el-col :span="10">
+          <div @click="logout" class="logout">
+            <i class="fa fa-sign-out-alt"></i>&nbsp;Logout
+          </div>
+        </el-col>
+      </el-row>
     </div>
     <div class="container">
       <aside class="tree-root">
@@ -48,7 +67,7 @@
 import { mapState } from "vuex";
 import FolderTree from "@/components/FolderTree";
 import FolderForm from "@/components/FolderForm";
-import { GetFolders, GetTeam } from "../constants/query.gql";
+import { GetFolders, GetTeam, SearchFolders } from "../constants/query.gql";
 
 export default {
   components: {
@@ -60,7 +79,9 @@ export default {
     return {
       showModal: false,
       getFolders: [],
-      getTeam: {}
+      getTeam: {},
+      links: [],
+      searchState: ""
     };
   },
   apollo: {
@@ -94,6 +115,29 @@ export default {
     },
     reloadPage() {
       window.location.reload();
+    },
+    querySearch(queryString, cb) {
+      this.$apollo
+        .query({
+          query: SearchFolders,
+          variables: {
+            text: queryString
+          }
+        })
+        .then(({ data: { searchFolders } }) => {
+          cb(
+            searchFolders.map(f => {
+              return { value: f.name, link: f.id };
+            })
+          );
+        })
+        .catch(error => {
+          this.error = "Something went wrong";
+          console.log(error);
+        });
+    },
+    handleSelect(item) {
+      this.$router.push({ name: "folder", params: { id: item.link } });
     }
   }
 };
@@ -123,6 +167,24 @@ aside {
 }
 
 .pointer {
+  cursor: pointer;
+}
+
+.search-input {
+  padding: 10px 0;
+}
+
+.search-input >>> input {
+  color: #c0ccd8;
+  background-color: #1b2430;
+  border: 1px solid #444;
+  width: 300px;
+}
+
+.logout {
+  position: absolute;
+  right: 20px;
+  padding: 15px 0;
   cursor: pointer;
 }
 </style>

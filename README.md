@@ -34,12 +34,18 @@ Modern project management tool with advanced analytics.
 - Project start and end date - datepicker
 - Visualization of project progress
 - Simple Gantt chart for subprojects
+- Project status tracking
+- Search bar
 
 
 ## TODO
-- Project status tracking
+- Project tags
+- Breadcrumb navigation
+- Custom project metadata
+- Teams and team members administration
+- Team allocation to projects
+- Team detailed allocation chart
 - Responsive UI layout
-- Team and personal allocation management
 - Integration with security providers
 - More visualizations - employee allocation, project spending, etc. 
 - Project deadline/delay prediction

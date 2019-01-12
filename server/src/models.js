@@ -2,8 +2,16 @@ const mongoose = require("mongoose")
 const Schema = mongoose.Schema
 const ObjectId = Schema.Types.ObjectId
 
-function buildModel(name, schema) {
-    return mongoose.model(name, new Schema(schema, { timestamps: true }))
+
+
+function buildModel(name, schemaInput) {
+    let schema = new Schema(schemaInput, { timestamps: true });
+    if (name === 'Folder') {
+        schema.index({ name: 'text', description: 'text' });
+    } else {
+        schema.index({ name: 'text' });
+    }
+    return mongoose.model(name, schema);
 }
 
 const Folder = buildModel('Folder', {
