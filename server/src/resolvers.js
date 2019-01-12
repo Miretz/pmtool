@@ -75,6 +75,9 @@ const resolvers = {
     async getFolderTeams(_, { id }, context) {
       const userId = getUserId(context);
       const folder = await Folder.findById(id).populate("shareWith");
+      if(folder.shareWith == null){
+        return [];
+      }
       const teams = folder.shareWith.filter(x => x.kind === "Team");
       return await teams.map(x => Team.findById(x.item));
     },
