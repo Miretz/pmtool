@@ -2,51 +2,11 @@
   <div>
     <!-- PROJECT PROGRESS -->
     <div class="subproject-list">
-      <div class="subproject-elem parent">
-        <el-row :gutter="12">
-          <el-col :span="24">
-            <el-row>
-              <el-col :span="12">
-                <div>
-                  <i class="far fa-folder-open"></i>
-                  &nbsp;{{model.name}}
-                  &nbsp;
-                  <el-button
-                    v-if="model.status != null"
-                    type="plain"
-                    v-bind:style="{ backgroundColor: model.status.color, color: '#555', border: 'none'}"
-                    size="mini"
-                    disabled
-                  >{{model.status.name}}</el-button>
-                </div>
-              </el-col>
-              <el-col :span="6">
-                <div class="gantt-progress-bar">
-                  <yan-progress
-                    :total="duration(model.startDate, model.endDate)"
-                    :done="duration(model.startDate, model.endDate)"
-                    :modify="calculateDaysSpent(model)"
-                    :tip="progressBarConfig(model)"
-                  />
-                </div>
-              </el-col>
-              <el-col :span="6">
-                <div
-                  class="float-right"
-                >{{model.startDate | formatDate}} - {{model.endDate | formatDate}}</div>
-              </el-col>
-            </el-row>
-            <el-row>
-              
-            </el-row>
-          </el-col>
-        </el-row>
-      </div>
       <div
-        v-for="f in getFolders"
+        v-for="f in allFolders"
         :key="f.id"
         :model="model"
-        :class="'subproject-elem'"
+        :class="'subproject-elem' + (model.id==f.id ? ' parent': '')"
         @click.left.stop="$router.push({name: 'folder', params: {id: f.id}})"
       >
         <el-row :gutter="12">
@@ -54,18 +14,20 @@
             <el-row>
               <el-col :span="12">
                 <div>
-                  <i class="far fa-folder"></i>
-                  &nbsp;/ {{f.name}}
-                  &nbsp;
+                  <i class="far fa-folder-open" v-if="model.id==f.id"></i>
+                  <i class="far fa-folder" v-if="model.id!=f.id"></i>
+                  {{ model.id!=f.id ? '/': '' }}
+                  {{f.name}}
                   <el-button
                     type="plain"
+                    v-if="f.status != null"
                     v-bind:style="{ backgroundColor: f.status.color, color: '#555', border: 'none'}"
                     size="mini"
                     disabled
                   >{{f.status.name}}</el-button>
                 </div>
               </el-col>
-              <el-col :span="6"> 
+              <el-col :span="6">
                 <div class="gantt-progress-bar">
                   <yan-progress
                     :total="duration(f.startDate, f.endDate)"
@@ -114,7 +76,7 @@ export default {
         datasets: [
           {
             //before
-            data: this.getFolders.map(f =>
+            data: this.allFolders.map(f =>
               this.duration(this.getFirstDate, f.startDate)
             ),
             backgroundColor: "rgba(255, 255, 255, 0)",
@@ -122,17 +84,24 @@ export default {
           },
           {
             //progress
-            data: this.getFolders.map(f =>
+            data: this.allFolders.map(f =>
               this.duration(f.startDate, f.endDate)
             ),
-            ids: this.getFolders.map(f => f.id),
-            backgroundColor: "rgba(0, 122, 204, 0.8)",
-            hoverBackgroundColor: "rgba(0, 122, 204, 1)",
-            borderWidth: 2
+            ids: this.allFolders.map(f => f.id),
+            backgroundColor: this.allFolders.map(f =>
+              f.id == this.model.id
+                ? "rgba(0, 156, 204, 0.2)"
+                : "rgba(0, 122, 204, 0.8)"
+            ),
+            hoverBackgroundColor: this.allFolders.map(f =>
+              f.id == this.model.id
+                ? "rgba(0, 156, 204, 0.3)"
+                : "rgba(0, 122, 204, 1)"
+            )
           },
           {
             //finished
-            data: this.getFolders.map(
+            data: this.allFolders.map(
               f =>
                 this.duration(this.getFirstDate, this.getLastDate) -
                 this.duration(this.getFirstDate, f.endDate)
@@ -141,14 +110,14 @@ export default {
             hoverBackgroundColor: "rgba(255, 255, 255, 0)"
           }
         ],
-        labels: this.getFolders.map(f => f.name)
+        labels: this.allFolders.map(f => f.name)
       };
     },
     getFirstDate: function() {
-      return moment.min(this.getFolders.map(d => moment(d.startDate)));
+      return moment.min(this.allFolders.map(d => moment(d.startDate)));
     },
     getLastDate: function() {
-      return moment.max(this.getFolders.map(d => moment(d.endDate)));
+      return moment.max(this.allFolders.map(d => moment(d.endDate)));
     },
     getTodaysIndex: function() {
       return this.duration(this.getFirstDate, new Date());
@@ -157,6 +126,11 @@ export default {
       return moment(new Date())
         .startOf("day")
         .toDate();
+    },
+    allFolders: function() {
+      let folders = Object.assign([], this.getFolders);
+      folders.unshift(this.model);
+      return folders;
     }
   },
   data() {
