@@ -47,6 +47,11 @@ export default {
   mounted() {
     this.generateChart();
   },
+  watch: {
+    data: function() {
+      this.generateChart();
+    }
+  },
   methods: {
     indexToDate(value) {
       return this.firstDate
@@ -136,7 +141,7 @@ export default {
             return;
           }
           const id = data.ids[activeElement[0]._index];
-          router.push({name: 'folder', params: {id: id}})
+          router.push({ name: "folder", params: { id: id } });
         }
       };
       this.renderChart(this.data, options);
