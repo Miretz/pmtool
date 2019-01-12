@@ -13,14 +13,14 @@ const login = {
   path: '/login',
   name: 'login',
   component: Login,
-  meta: { title: 'Login - pmtool' }
+  meta: { title: 'Login - TaskDesk' }
 }
 
 const workspace = {
   path: '/w',
   name: 'workspace',
   component: Workspace,
-  meta: { title: 'Workspace - pmtool', requiresAuth: true },
+  meta: { title: 'Workspace - TaskDesk', requiresAuth: true },
   children: [
     {
       path: 'folder/:id',
@@ -44,13 +44,13 @@ const router = new Router({
       path: '/',
       name: 'home',
       component: Home,
-      meta: { title: 'pmtool', redirect: true }
+      meta: { title: 'TaskDesk', redirect: true }
     },
     {
       path: '/signup/:id',
       name: 'signup',
       component: Signup,
-      meta: { title: 'Signup - pmtool' }
+      meta: { title: 'Signup - TaskDesk' }
     },
     login,
     workspace

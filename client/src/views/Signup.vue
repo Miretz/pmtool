@@ -4,7 +4,7 @@
 
     <el-main>
       <div class="container-center">
-        <div>Welcome to pmtool! Finish setting up your account</div>
+        <div>Welcome to TaskDesk! Finish setting up your account</div>
 
         <div v-if="error" class="error">{{ error }}</div>
 

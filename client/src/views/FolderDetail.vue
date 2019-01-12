@@ -81,7 +81,7 @@ export default {
   },
   props: ["folder"],
   mounted() {
-    document.title = `${this.folder.name} - pmtool`;
+    document.title = `${this.folder.name} - TaskDesk`;
   },
   methods: {
     validateSettings() {

@@ -4,7 +4,7 @@
       <el-row type="flex">
         <el-col :span="10">
           <div @click="reloadPage" class="pointer">
-            <h1>PMTOOL</h1>
+            <h1><i class="fas fa-user-tie"></i> TaskDesk</h1>
           </div>
         </el-col>
         <el-col :span="4">
@@ -176,8 +176,8 @@ aside {
 
 .search-input >>> input {
   color: #c0ccd8;
-  background-color: #1b2430;
-  border: 1px solid #444;
+  background-color: #242f3f;
+  border: 1px solid #556;
   width: 300px;
 }
 

@@ -167,7 +167,7 @@ export default {
             ? "Project description is empty.\n"
             : this.folder.description;
         if (this.isTeam) {
-          document.title = `${this.folder.name} - pmtool`;
+          document.title = `${this.folder.name} - TaskDesk`;
         }
         this.status = this.folder.status;
       }
