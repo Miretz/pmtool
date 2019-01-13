@@ -7,37 +7,37 @@ const originalDraw = Chart.controllers.horizontalBar.prototype.draw;
 Chart.controllers.horizontalBar.prototype.draw = function(ease) {
   originalDraw.call(this, ease);
 
-  function drawLine(chart, index, color, text) {
+  function drawLine(chart, index, lineColor, textColor, text, yOffset = 0) {
     const context = chart.chart.ctx;
     const vScale = chart.scales["y-axis-0"];
     const hScale = chart.scales["x-axis-0"];
     const left = (index / hScale.end) * (hScale.right - hScale.left);
 
     context.beginPath();
-    context.strokeStyle = color;
+    context.strokeStyle = lineColor;
     context.moveTo(hScale.left + left, vScale.top);
     context.lineTo(hScale.left + left, vScale.bottom);
     context.stroke();
 
-    if (text != "") {
-      const x = hScale.left + left;
-      const y = vScale.top - 12;
-      var width = context.measureText(text).width + 10;
-      context.fillStyle = "#ffffff";
-      context.fillRect(x - width / 2, y - 10, width, 20);
-      context.textAlign = "center";
-      context.fillStyle = color;
-      context.fillText(text, x, y);
-    }
+    const height = 12;
+    const width = context.measureText(text).width + 10;
+    const x = hScale.left + left;
+    const y = vScale.top - height - yOffset;
+
+    context.fillStyle = "#fff";
+    context.fillRect(x - width / 2, y - 10, width, height);
+    context.textAlign = "center";
+    context.fillStyle = textColor;
+    context.fillText(text, x, y);
   }
 
   const lines = this.chart.chart.options.extraLines;
   lines.map(({ pos, text }) => {
-    drawLine(this.chart, pos, "#aaa", text);
+    drawLine(this.chart, pos, "#fc0", "#e68a00", text, -4);
   });
 
   const todayDataIndex = this.chart.chart.options.lineAtIndex;
-  drawLine(this.chart, todayDataIndex, "#ff0000", "");
+  drawLine(this.chart, todayDataIndex, "#ff0000", "#ff0000", "TODAY", 14);
 };
 
 /* CHART */
@@ -64,7 +64,7 @@ export default {
       const ends = this.data.datasets[1].data.map((x, i) => x + starts[i]);
       const all = starts.concat(ends);
       return all.map(x => {
-        return { pos: x, text: this.indexToDate(x) };
+        return { pos: x, text: this.indexToDate(x).substring(0, 6) };
       });
     },
     generateChart() {

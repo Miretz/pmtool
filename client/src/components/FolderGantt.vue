@@ -29,12 +29,19 @@
               </el-col>
               <el-col :span="6">
                 <div class="gantt-progress-bar">
-                  <yan-progress
-                    :total="duration(f.startDate, f.endDate)"
-                    :done="duration(f.startDate, f.endDate)"
-                    :modify="calculateDaysSpent(f)"
-                    :tip="progressBarConfig(f)"
-                  />
+                  <el-tooltip
+                    class="item"
+                    effect="dark"
+                    :content="'Days spent: ' + calculateDaysSpent(f) + ' of ' + duration(f.startDate, f.endDate)"
+                    placement="top"
+                  >
+                    <el-progress
+                      :show-text="false"
+                      :stroke-width="8"
+                      :percentage="progressPercent(f)"
+                      color="#92CD00"
+                    ></el-progress>
+                  </el-tooltip>
                 </div>
               </el-col>
               <el-col :span="6">
@@ -80,8 +87,7 @@ export default {
             data: this.allFolders.map(f =>
               this.duration(this.getFirstDate, f.startDate)
             ),
-            backgroundColor: "rgba(255, 255, 255, 0)",
-            hoverBackgroundColor: "rgba(255, 255, 255, 0)"
+            backgroundColor: "rgba(0, 0, 0, 0)"
           },
           {
             //progress
@@ -97,7 +103,7 @@ export default {
             hoverBackgroundColor: this.allFolders.map(f =>
               f.id === this.model.id
                 ? pattern.draw("diagonal", f.status.color)
-                : this.adjustColor(f.status.color, -10)
+                : this.adjustColor(f.status.color, -15)
             )
           },
           {
@@ -107,8 +113,7 @@ export default {
                 this.duration(this.getFirstDate, this.getLastDate) -
                 this.duration(this.getFirstDate, f.endDate)
             ),
-            backgroundColor: "rgba(255, 255, 255, 0)",
-            hoverBackgroundColor: "rgba(255, 255, 255, 0)"
+            backgroundColor: "rgba(0, 0, 0, 0)"
           }
         ],
         labels: this.allFolders.map(f => f.name)
@@ -164,6 +169,15 @@ export default {
         0
       );
     },
+    progressPercent(f) {
+      if(f.startDate == null || f.endDate == null){
+        return 0;
+      }
+      return  Math.round(
+        (this.calculateDaysSpent(f) / this.duration(f.startDate, f.endDate)) *
+          100
+      );
+    },
     adjustColor(hexColor, amt) {
       let col = hexColor.slice(1);
       let num = parseInt(col, 16);
@@ -172,26 +186,6 @@ export default {
       let g = (num & 0x0000ff) + amt;
       let newColor = g | (b << 8) | (r << 16);
       return "#" + newColor.toString(16);
-    },
-    progressBarConfig(f) {
-      let remaining = Math.max(
-        this.duration(f.startDate, f.endDate) - this.calculateDaysSpent(f),
-        0
-      );
-      return [
-        {
-          text: `Project done`,
-          fillStyle: "#92CD00"
-        },
-        {
-          text: `Days remaining: ${remaining}`,
-          fillStyle: "#92CD00"
-        },
-        {
-          text: `Days spent: X`,
-          fillStyle: "#ffda6b"
-        }
-      ];
     }
   }
 };
