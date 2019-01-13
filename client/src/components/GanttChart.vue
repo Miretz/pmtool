@@ -33,7 +33,7 @@ Chart.controllers.horizontalBar.prototype.draw = function(ease) {
 
   const lines = this.chart.chart.options.extraLines;
   lines.map(({ pos, text }) => {
-    drawLine(this.chart, pos, "#fcaa00", text);
+    drawLine(this.chart, pos, "#aaa", text);
   });
 
   const todayDataIndex = this.chart.chart.options.lineAtIndex;

@@ -61,6 +61,7 @@
 <script>
 import { GetFolders } from "../constants/query.gql";
 import moment from "moment";
+import pattern from "patternomaly";
 import GanttChart from "./GanttChart.vue";
 export default {
   props: ["model"],
@@ -89,14 +90,14 @@ export default {
             ),
             ids: this.allFolders.map(f => f.id),
             backgroundColor: this.allFolders.map(f =>
-              f.id == this.model.id
-                ? "rgba(0, 156, 204, 0.2)"
-                : "rgba(0, 122, 204, 0.8)"
+              f.id === this.model.id
+                ? pattern.draw("diagonal", f.status.color)
+                : f.status.color
             ),
             hoverBackgroundColor: this.allFolders.map(f =>
-              f.id == this.model.id
-                ? "rgba(0, 156, 204, 0.3)"
-                : "rgba(0, 122, 204, 1)"
+              f.id === this.model.id
+                ? pattern.draw("diagonal", f.status.color)
+                : this.adjustColor(f.status.color, -10)
             )
           },
           {
@@ -163,6 +164,15 @@ export default {
         0
       );
     },
+    adjustColor(hexColor, amt) {
+      let col = hexColor.slice(1);
+      let num = parseInt(col, 16);
+      let r = (num >> 16) + amt;
+      let b = ((num >> 8) & 0x00ff) + amt;
+      let g = (num & 0x0000ff) + amt;
+      let newColor = g | (b << 8) | (r << 16);
+      return "#" + newColor.toString(16);
+    },
     progressBarConfig(f) {
       let remaining = Math.max(
         this.duration(f.startDate, f.endDate) - this.calculateDaysSpent(f),
@@ -202,15 +212,15 @@ export default {
   cursor: pointer;
   text-align: justify;
   padding: 10px;
-  border: 1px solid #eee;
-  background-color: #fff;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
   border-radius: 4px;
   -webkit-box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 }
 .parent {
   margin: 8px 20px 8px 20px;
-  border: 2px solid #ccc;
+  border: 1px solid #ccc;
   font-weight: bold;
 }
 .subproject-card {
