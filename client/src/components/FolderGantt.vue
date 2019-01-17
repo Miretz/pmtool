@@ -28,6 +28,7 @@
                 </div>
               </el-col>
               <el-col :span="6">
+                <!-- PROGRESS BARS -->
                 <div class="gantt-progress-bar">
                   <el-tooltip
                     class="item"
