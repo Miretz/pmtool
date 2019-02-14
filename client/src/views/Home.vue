@@ -22,6 +22,11 @@
         <div v-if="submitted">
           <div>Thank you!</div>
           <div>Please check your email.</div>
+          <router-link
+            v-if="debugLogin"
+            :to="{name: 'signup', params: {id: userId }}"
+            class="link"
+          >Signup Url (Development Only)</router-link>
         </div>
       </div>
     </el-main>
@@ -37,7 +42,9 @@ export default {
       error: false,
       form: {
         email: ""
-      }
+      },
+      userId: "",
+      debugLogin: false
     };
   },
   methods: {
@@ -56,7 +63,11 @@ export default {
           this.submitted = true;
           this.error = false;
           // For development only
-          console.log(data.captureEmail.id);
+          if (`${process.env.VUE_APP_DEV_LOGIN}` === "true") {
+            this.debugLogin = true;
+            console.log(data.captureEmail.id);
+            this.userId = data.captureEmail.id;
+          }
         })
         .catch(error => {
           if (error.graphQLErrors.length >= 1) {

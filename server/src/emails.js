@@ -18,3 +18,7 @@ ${url}/signup/${user.id}
         text
     }
 }
+
+module.exports.welcomeLog = function (email, user) {
+    return `Signup url for ${email} is: ${url}/signup/${user.id}`
+}

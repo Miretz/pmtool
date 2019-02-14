@@ -15,7 +15,7 @@ function randomChoice(arr) {
 }
 
 const nodeMailer = require("nodemailer");
-const { welcomeEmail } = require("./emails");
+const { welcomeEmail, welcomeLog } = require("./emails");
 const transporter = nodeMailer.createTransport({
   host: "smtp.gmail.com",
   port: 465,
@@ -99,7 +99,7 @@ const resolvers = {
       });
       //send emails
       //transporter.sendMail(welcomeEmail(email, user))
-      console.log(welcomeEmail(email, user));
+      console.log(welcomeLog(email, user));
       return user;
     },
     async signup(_, { id, firstname, lastname, password }) {
