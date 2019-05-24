@@ -1,0 +1,15 @@
+server/node_modules
+client/node_modules
+.dockerignore
+Dockerfile
+npm-debug.log
+.git
+.hg
+.svn
+.gitignore
+.vscode
+client/dist
+README.md
+screenshot.png
+start_unix.txt
+start_windows.txt

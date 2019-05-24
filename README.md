@@ -54,3 +54,21 @@ Modern project management tool with advanced analytics.
 
 
 <img src="screenshot.png" />
+
+## Run in docker
+
+Note: this is a docker image to play around and it currently contains all the components in one image.
+
+Build
+```bash
+docker build -t taskdesk .
+```
+
+Run
+```bash
+docker run -it --rm -p 8080:8080 -p 5500:5500 taskdesk
+```
+
+Access the UI: http://localhost:8080/
+
+GraphQL Backend: http://localhost:5500/playground
