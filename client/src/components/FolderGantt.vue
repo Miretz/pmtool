@@ -212,14 +212,22 @@ export default {
   border-radius: 4px;
   -webkit-box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  cursor: pointer !important;
 }
 .parent {
   margin: 8px 20px 8px 20px;
   border: 1px solid #ccc;
   font-weight: bold;
+  cursor: default !important;
 }
 .subproject-card {
   overflow: visible;
   z-index: -1;
+}
+.el-button {
+   cursor: pointer !important;
+}
+.parent .el-button {
+   cursor: default !important;
 }
 </style>

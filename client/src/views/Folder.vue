@@ -13,7 +13,7 @@
               <i class="fas fa-arrow-left"></i>&nbsp;
             </div>
             {{folder.name}}
-            <div class="float-right" v-if="!isTeam(folder) && subRoute==='folder'">
+            <div class="float-right">
               <!-- Project status dropdown -->
               <el-dropdown @command="handleStatusChange">
                 <el-button
@@ -99,7 +99,7 @@
         </div>
       </div>
     </el-col>
-    <el-col v-if="!isTeam(folder) && subRoute==='folder' && showEditor" :span="12">
+    <el-col v-if="showEditor" :span="12">
       <FolderDetail :folder="folder" @hideEditor="toggleEditor"></FolderDetail>
     </el-col>
   </el-row>
@@ -166,9 +166,7 @@ export default {
           this.folder.description === ""
             ? "Project description is empty.\n"
             : this.folder.description;
-        if (this.isTeam) {
-          document.title = `${this.folder.name} - TaskDesk`;
-        }
+        document.title = `${this.folder.name} - TaskDesk`;
         this.status = this.folder.status;
       }
     },
